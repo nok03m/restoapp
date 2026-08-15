@@ -1,60 +1,61 @@
-RestoApp - Taller de Refactorización y Uso de IA
+# 🍽️ RestoApp
 
-Resumen
-- Proyecto base (legacy) para que estudiantes practiquen refactorización: [index.html](index.html).
-- Contiene malas prácticas intencionales (variables globales, autenticación en cliente, lógica monolítica) pero es funcional y conectado a Firebase Realtime Database en:
-  https://stock-flow-2e23e-default-rtdb.firebaseio.com/menu.json
+Sistema web de gestión de pedidos y administración de menú para restaurantes.
 
-Objetivo del taller
-- Transformar esta base en una MPA (Multiple Page Application) bien estructurada y modular.
-- Enseñar a usar la IA como asistente para revisar, proponer y aplicar refactorizaciones.
+> 🔑 **Credenciales de prueba**
+> - **Email:** `test@mail.com`
+> - **Contraseña:** `test123456`
 
-Instrucciones rápidas
-1. Abrir `index.html` en el navegador (doble clic). El proyecto es estático.
-2. Revisar el código y buscar los TODOs y comentarios que indican malas prácticas.
+---
 
-Ejercicios sugeridos (orden recomendado)
-- Ejercicio 1 — Convertir a MPA
-  - Separar vistas en varios archivos HTML (p. ej. `index.html`, `login.html`, `admin.html`, `pedido.html`).
-  - Mantener un único `styles.css` en `css/styles.css` y enlazarlo desde cada HTML.
+## 🚀 Funcionalidades
 
-- Ejercicio 2 — Modularizar JavaScript
-  - Extraer funciones a archivos JS por responsabilidad (p. ej. `menu.js`, `auth.js`, `pedidos.js`).
-  - Evitar variables globales; usar módulos ES o patrones IIFE.
+- **Autenticación de Usuarios:** Control de acceso mediante Supabase Auth (`login.html`).
+- **Toma de Pedidos:** Selección de platos, cálculo automático de precios e impuestos con resumen de compra (`index.html`).
+- **Gestión de Menú (Admin):** Creación de nuevos platos y visualización paginada (10 por 10) de los productos activos (`admin.html`).
 
-- Ejercicio 3 — Mejorar autenticación y seguridad
-  - No dejar credenciales en cliente. Implementar (si se desea) un backend mínimo o usar Firebase Auth.
-  - Agregar reglas de seguridad en Realtime Database para restringir escritura.
+---
 
-- Ejercicio 4 — Limpieza y pruebas
-  - Eliminar código muerto y funciones obsoletas.
-  - Añadir validaciones más estrictas y mensajes de error más claros.
-  - Escribir pruebas manuales o automatizadas (si conocen alguna herramienta simple).
+## 🛠️ Tecnologías
 
-- Ejercicio 5 — Buenas prácticas
-  - Separar lógica de negocio de manipulación DOM.
-  - Añadir manejo de errores robusto y feedback al usuario.
+- **Frontend:** HTML5, Vanilla CSS, JavaScript ES Modules.
+- **Backend & Base de Datos:** Supabase (PostgreSQL & Auth).
+- **Despliegue / Build:** Node.js (script de inyección de variables de entorno) y Vercel.
 
-Uso de la IA como asistente
-- Pide a la IA que haga cambios pequeños y justificables: "Refactoriza `tomarTodo()` separando cálculos de impuestos.".
-- Ejemplos de prompts útiles:
-  - "Sugiéreme una estructura de archivos para convertir esto en una MPA." 
-  - "Refactoriza este archivo para eliminar variables globales y exportar funciones como módulo." 
-  - "Detecta y lista las malas prácticas en `index.html`." 
-- Pide a la IA que aplique cambios con parches (apply_patch) y que deje comentarios TODO para los estudiantes.
+---
 
-Entregables esperados
-- Una versión MPA con archivos HTML separados.
-- Un archivo `css/styles.css` que unifique estilos.
-- Carpeta `js/` con módulos claros y sin variables globales.
-- Un breve `CHANGELOG.md` o un PR/commit donde se describan las refactorizaciones.
+## 📁 Estructura del Proyecto
 
-Notas finales
-- El repositorio contiene intencionalmente malas prácticas para que los estudiantes las identifiquen y corrijan.
-- Mantener un flujo de trabajo en branches y commits pequeños ayuda a usar la IA para revisiones iterativas.
+```text
+restoapp/
+├── admin.html          # Vista de administración de platos
+├── index.html          # Vista principal de toma de pedidos
+├── login.html          # Vista de inicio de sesión
+├── build.js            # Script para generar js/env.js en despliegue/local
+├── css/
+│   └── styles.css      # Hoja de estilos unificada
+├── js/
+│   ├── admin.js        # Lógica de administración
+│   ├── api.js          # Conexión y consultas a Supabase
+│   ├── auth.js         # Autenticación y control de sesiones
+│   ├── config.js       # Configuración e inicialización de cliente Supabase
+│   ├── menu.js         # Carga y paginación del menú
+│   └── pedidos.js      # Lógica de negocio para toma de pedidos
+└── supabase/
+    └── migrations/     # Scripts SQL para creación y poblado de tablas
+```
 
-Si quieres, puedo:
-- Añadir comentarios TODO directamente dentro de `index.html` para guiar a los estudiantes.
-- Generar una estructura de archivos inicial (carpetas `css/`, `js/`, `pages/`) y mover/crear archivos básicos.
+---
 
-Autor: Instructor (plantilla para taller)
+## 💻 Ejecución Local
+
+1. Configurar variables de entorno (copiar `env.example.js` o definir `.env`):
+   ```bash
+   SUPABASE_URL=tu_supabase_url
+   SUPABASE_ANON_KEY=tu_supabase_key
+   ```
+2. Generar el archivo de configuración:
+   ```bash
+   npm run build
+   ```
+3. Servir los archivos estáticos en cualquier servidor web local (ej. Live Server).
