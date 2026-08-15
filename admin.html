@@ -84,10 +84,11 @@
           </header>
 
           <div class="form-group">
-            <label class="form-label" for="menu-preview">Platos disponibles</label>
-            <select id="menu-preview" class="form-select" disabled aria-label="Lista de platos actuales en el menú">
-              <option>Cargando menú…</option>
-            </select>
+            <label class="form-label">Platos disponibles</label>
+            <ul id="menu-list" class="menu-list" aria-label="Lista de platos en el menú"></ul>
+            <button id="load-more-btn" class="btn btn--ghost" style="width: 100%; margin-top: var(--space-4); display: none;">
+              Mostrar más
+            </button>
           </div>
         </div>
 

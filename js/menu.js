@@ -56,6 +56,86 @@ export function getNameByKey(key) {
   return menuCache[key]?.name ?? '';
 }
 
+/**
+ * Carga el menú desde la API y renderiza una lista paginada de 10 en 10
+ * con un botón "Mostrar más".
+ *
+ * @param {HTMLElement} listElement - Elemento <ul> donde renderizar la lista.
+ * @param {HTMLButtonElement} loadMoreBtn - Botón "Mostrar más".
+ * @returns {Promise<void>}
+ */
+export async function loadPaginatedMenu(listElement, loadMoreBtn) {
+  if (!listElement) return;
+
+  listElement.innerHTML = '<li class="menu-list__loading">Cargando menú…</li>';
+  if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+
+  try {
+    menuCache = await fetchMenu();
+    const items = Object.entries(menuCache).map(([id, item]) => ({ id, ...item }));
+    const PAGE_SIZE = 10;
+    let visibleCount = PAGE_SIZE;
+
+    const render = () => {
+      if (items.length === 0) {
+        listElement.innerHTML = '<li class="menu-list__empty">No hay productos disponibles.</li>';
+        if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+        return;
+      }
+
+      const visibleItems = items.slice(0, visibleCount);
+      listElement.innerHTML = visibleItems
+        .map(
+          item => `
+        <li class="menu-list__item">
+          <span class="menu-list__name">${escapeHtml(item.name)}</span>
+          <span class="menu-list__price">$${item.price.toFixed(2)}</span>
+        </li>
+      `
+        )
+        .join('');
+
+      if (loadMoreBtn) {
+        if (visibleCount < items.length) {
+          loadMoreBtn.style.display = 'block';
+        } else {
+          loadMoreBtn.style.display = 'none';
+        }
+      }
+    };
+
+    render();
+
+    if (loadMoreBtn) {
+      // Remover listener previo si existía mediante reemplazo del elemento botón
+      const newBtn = loadMoreBtn.cloneNode(true);
+      loadMoreBtn.parentNode?.replaceChild(newBtn, loadMoreBtn);
+
+      newBtn.addEventListener('click', () => {
+        visibleCount += PAGE_SIZE;
+        render();
+      });
+    }
+  } catch (error) {
+    console.error('[menu] Error al cargar el menú paginado:', error);
+    listElement.innerHTML =
+      '<li class="menu-list__empty">Error al cargar el menú. Recarga la página.</li>';
+    if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+  }
+}
+
+/**
+ * Escapa HTML para prevenir inyecciones XSS en el renderizado de texto.
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 // ---------------------------------------------------------------------------
 // Helpers privados de renderizado
 // ---------------------------------------------------------------------------
@@ -102,3 +182,4 @@ function renderErrorState(selectElement) {
   selectElement.innerHTML =
     '<option value="">Error al cargar el menú. Recarga la página.</option>';
 }
+

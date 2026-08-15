@@ -6,7 +6,7 @@
 
 import { createProduct } from './api.js';
 import { logout, requireAuth } from './auth.js';
-import { loadMenu } from './menu.js';
+import { loadPaginatedMenu } from './menu.js';
 
 /**
  * Inicializa la página de administración.
@@ -19,10 +19,11 @@ export async function initAdminPage() {
 
   const form = document.getElementById('product-form');
   const logoutBtn = document.getElementById('logout-btn');
-  const menuSelect = document.getElementById('menu-preview');
+  const menuList = document.getElementById('menu-list');
+  const loadMoreBtn = document.getElementById('load-more-btn');
 
-  if (menuSelect) {
-    loadMenu(menuSelect);
+  if (menuList) {
+    loadPaginatedMenu(menuList, loadMoreBtn);
   }
 
   form?.addEventListener('submit', handleCreateProduct);
@@ -64,9 +65,10 @@ async function handleCreateProduct(event) {
     showMessage(messageEl, `✓ "${product.name}" creado exitosamente.`, 'success');
     event.target.reset();
 
-    // Recargar el menú de vista previa para incluir el nuevo producto
-    const menuSelect = document.getElementById('menu-preview');
-    if (menuSelect) loadMenu(menuSelect);
+    // Recargar la lista paginada del menú para incluir el nuevo producto
+    const menuList = document.getElementById('menu-list');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    if (menuList) loadPaginatedMenu(menuList, loadMoreBtn);
   } catch (error) {
     console.error('[admin] Error al crear producto:', error);
     showMessage(messageEl, 'No se pudo crear el producto. Intenta de nuevo.', 'error');
