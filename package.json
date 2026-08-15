@@ -1,0 +1,8 @@
+{
+  "name": "restoapp",
+  "version": "1.0.0",
+  "description": "Sistema de pedidos RestoApp",
+  "scripts": {
+    "build": "node build.js"
+  }
+}

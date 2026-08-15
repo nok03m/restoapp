@@ -1,212 +1,150 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>RestoApp - Sistema de Pedidos (LEGACY)</title>
-    <style>
-        /* CSS Desordenado y con selectores redundantes */
-        body { font-family: sans-serif; }
-        .contenedor-principal { width: 400px; margin: auto; padding-top: 50px; }
-        .clase_redundante_que_no_se_usa { color: transparent; display: none; }
-        #form { border: 1px solid #000; padding: 20px; }
-        .item { margin-bottom: 10px; }
-        #btn { background-color: green; color: white; padding: 10px; cursor: pointer; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema de toma de pedidos para meseros — RestoApp.">
+  <title>Pedidos — RestoApp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body class="page pedido-page">
 
-<div class="contenedor-principal">
-    <h2>RestoApp - Mesero V1.0</h2>
-    <div id="form">
-        <div class="item">
-            Plato ID: 
-            <select id="a">
-                <option value="">--Cargando menú--</option>
+  <!-- Barra de navegación -->
+  <nav class="navbar" aria-label="Navegación principal">
+    <div class="navbar__brand">
+      <span aria-hidden="true">🍽️</span>
+      <span>Resto<span>App</span></span>
+    </div>
+    <div class="navbar__actions">
+      <a href="login.html" class="btn btn--ghost">Panel admin</a>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="container container--wide">
+      <div class="card">
+
+        <header class="card__header">
+          <div class="card__icon" aria-hidden="true">🧾</div>
+          <div>
+            <h1 class="card__title">Tomar pedido</h1>
+            <p class="card__subtitle">Selecciona el plato, ingresa la cantidad y procesa el pedido</p>
+          </div>
+        </header>
+
+        <form id="order-form" class="form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="menu-select">Plato</label>
+            <select id="menu-select" class="form-select" required aria-label="Selección de plato del menú">
+              <option value="">Cargando menú…</option>
             </select>
-        </div>
-        <div class="item">
-            Cantidad: <input type="number" id="b">
-        </div>
-        <div class="item">
-            Precio Unitario ($): <input type="number" id="p">
-        </div>
-        <button id="btn" onclick="tomarTodo()">PROCESAR TODO</button>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="quantity">Cantidad</label>
+              <input
+                id="quantity"
+                type="number"
+                class="form-input"
+                placeholder="Ej: 2"
+                min="1"
+                step="1"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="unit-price">Precio unitario (USD)</label>
+              <input
+                id="unit-price"
+                type="number"
+                class="form-input"
+                placeholder="Se autocompleta"
+                min="0"
+                step="0.01"
+                readonly
+                aria-readonly="true"
+              >
+            </div>
+          </div>
+
+          <div id="order-message" class="form-message" role="alert" aria-live="polite"></div>
+
+          <button id="process-btn" type="submit" class="btn btn--primary">
+            Procesar pedido
+          </button>
+        </form>
+
+        <!-- Resumen del pedido procesado -->
+        <div id="order-summary" class="order-summary" role="region" aria-label="Resumen del pedido" aria-live="polite"></div>
+
+      </div>
     </div>
+  </main>
 
-    <div id="res" style="margin-top: 20px; font-weight: bold;"></div>
+  <script type="module">
+    import { loadMenu, getPriceByKey, getNameByKey } from './js/menu.js';
+    import { calculateTotals, validateOrderForm, buildOrderSummaryHTML } from './js/pedidos.js';
 
-    <!-- Sección de autenticación (Mala práctica: credenciales en cliente) -->
-    <div id="auth" style="margin-top:20px; border:1px dashed #ccc; padding:10px;">
-        <h3>Acceso al sistema</h3>
-        Usuario: <input type="text" id="user"> Contraseña: <input type="password" id="pass">
-        <button id="loginBtn" onclick="login()">Ingresar</button>
-        <button id="logoutBtn" onclick="logout()" style="display:none">Cerrar sesión</button>
-        <div id="authMsg" style="margin-top:8px;color:darkred;"></div>
-    </div>
+    const menuSelect  = document.getElementById('menu-select');
+    const quantityInput = document.getElementById('quantity');
+    const unitPriceInput = document.getElementById('unit-price');
+    const orderForm   = document.getElementById('order-form');
+    const messageEl   = document.getElementById('order-message');
+    const summaryEl   = document.getElementById('order-summary');
+    const processBtn  = document.getElementById('process-btn');
 
-    <!-- Formulario para crear productos (solo visible si está autenticado) -->
-    <div id="productForm" style="margin-top:20px; border:1px solid #ddd; padding:10px; display:none;">
-        <h3>Crear producto (Mala práctica: sin validación segura)</h3>
-        Nombre: <input type="text" id="newName"> Precio: <input type="number" id="newPrice"> 
-        <button onclick="crearProducto()">Crear</button>
-        <div id="prodMsg" style="margin-top:8px;color:green;"></div>
-    </div>
-</div>
+    // Cargar menú al iniciar la página
+    await loadMenu(menuSelect);
 
-<script>
-    // --- VARIABLES GLOBALES (Mala práctica) ---
-    var items = [];
-    var total_global = 0;
-    var menuData = {};
-
-    // Cargar menú desde Realtime Database
-    function cargarMenu() {
-        var url = "https://stock-flow-2e23e-default-rtdb.firebaseio.com/menu.json";
-        fetch(url)
-            .then(function(res){ if(!res.ok) throw new Error('Network response was not ok'); return res.json(); })
-            .then(function(data){
-                menuData = {};
-                var select = document.getElementById('a');
-                select.innerHTML = '<option value="">--Selecciona plato--</option>';
-                if (Array.isArray(data)) {
-                    data.forEach(function(item, idx){
-                        var id = item.id || idx;
-                        var name = item.name || ('Plato ' + id);
-                        var price = item.price || item.precio || 0;
-                        menuData[id] = price;
-                        var opt = document.createElement('option');
-                        opt.value = id;
-                        opt.text = name + ' ($' + price + ')';
-                        select.appendChild(opt);
-                    });
-                } else if (typeof data === 'object' && data !== null) {
-                    Object.keys(data).forEach(function(key){
-                        var item = data[key] || {};
-                        var name = item.name || key;
-                        var price = item.price || item.precio || 0;
-                        menuData[key] = price;
-                        var opt = document.createElement('option');
-                        opt.value = key;
-                        opt.text = name + ' ($' + price + ')';
-                        select.appendChild(opt);
-                    });
-                }
-            })
-            .catch(function(err){
-                console.error('Error cargando menu:', err);
-                var select = document.getElementById('a');
-                select.innerHTML = '<option value="">--Error cargando menú--</option>';
-            });
-    }
-
-    // Autocompletar precio al seleccionar plato
-    document.addEventListener('change', function(e){
-        if (e.target && e.target.id === 'a') {
-            var val = e.target.value;
-            if (menuData && menuData[val] !== undefined) {
-                document.getElementById('p').value = menuData[val];
-            }
-        }
+    // Autocompletar el precio al seleccionar un plato
+    menuSelect.addEventListener('change', () => {
+      const selectedKey = menuSelect.value;
+      unitPriceInput.value = selectedKey ? getPriceByKey(selectedKey).toFixed(2) : '';
+      clearFeedback();
     });
 
-    // --- FUNCIÓN MONOLÍTICA (Complejidad ciclomática alta) ---
-    function tomarTodo() {
-        // Nombres de variables crípticos (a, b, p)
-        let a = document.getElementById('a').value;
-        let b = document.getElementById('b').value;
-        let p = document.getElementById('p').value;
+    // Procesar el pedido al enviar el formulario
+    orderForm.addEventListener('submit', (event) => {
+      event.preventDefault();
 
-        // Conversión lax
-        b = Number(b);
-        p = Number(p);
+      const formData = {
+        itemKey:   menuSelect.value,
+        quantity:  parseFloat(quantityInput.value),
+        unitPrice: parseFloat(unitPriceInput.value),
+      };
 
-        // Validación sencilla
-        if (a != "" && b > 0) {
-            let sub = b * p;
-            // IVA hardcodeado 19%
-            let tax = sub * 0.19;
-            let total = sub + tax;
+      const validation = validateOrderForm(formData);
+      if (!validation.valid) {
+        showMessage(validation.message, 'error');
+        return;
+      }
 
-            document.getElementById('res').innerHTML = "Pedido: " + a + " | Subtotal: $" + sub.toFixed(2) + " | IVA: $" + tax.toFixed(2) + " | Total: $" + total.toFixed(2);
+      try {
+        const totals = calculateTotals(formData.quantity, formData.unitPrice);
+        const itemName = getNameByKey(formData.itemKey);
+        summaryEl.innerHTML = buildOrderSummaryHTML(itemName, totals);
+        clearFeedback();
+        orderForm.reset();
+        unitPriceInput.value = '';
+      } catch (err) {
+        showMessage(err.message, 'error');
+      }
+    });
 
-            // Limpieza manual del formulario
-            document.getElementById('a').value = "";
-            document.getElementById('b').value = "";
-            document.getElementById('p').value = "";
-        } else {
-            alert("Error en datos");
-        }
+    function showMessage(message, type) {
+      messageEl.textContent = message;
+      messageEl.className = `form-message form-message--${type}`;
     }
 
-    // --- CÓDIGO MUERTO (Función que nunca se llama) ---
-    function funcionObsoletaCalculoAnterior(x, y) {
-        let res = x / y;
-        console.log("Calculando algo que ya no usamos...");
-        return res;
+    function clearFeedback() {
+      messageEl.textContent = '';
+      messageEl.className = 'form-message';
     }
-
-    // Iniciar carga de menú
-    window.onload = function(){
-        cargarMenu();
-    };
-
-    // --- Autenticación muy insegura (para práctica de refactor) ---
-    var isLogged = false;
-    // Credenciales hardcodeadas (NO HACER ESTO en producción)
-    var ADMIN_USER = 'admin';
-    var ADMIN_PASS = 'admin';
-
-    function login() {
-        var u = document.getElementById('user').value;
-        var p = document.getElementById('pass').value;
-        if (u === ADMIN_USER && p === ADMIN_PASS) {
-            isLogged = true;
-            document.getElementById('authMsg').innerText = 'Autenticado';
-            document.getElementById('loginBtn').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'inline-block';
-            document.getElementById('productForm').style.display = 'block';
-        } else {
-            document.getElementById('authMsg').innerText = 'Credenciales inválidas';
-        }
-    }
-
-    function logout() {
-        isLogged = false;
-        document.getElementById('authMsg').innerText = '';
-        document.getElementById('loginBtn').style.display = 'inline-block';
-        document.getElementById('logoutBtn').style.display = 'none';
-        document.getElementById('productForm').style.display = 'none';
-    }
-
-    // Crear producto: POST directo a Realtime DB (mala práctica: sin auth, sin sanitizar)
-    function crearProducto() {
-        if (!isLogged) {
-            document.getElementById('prodMsg').innerText = 'No autorizado';
-            return;
-        }
-        var name = document.getElementById('newName').value;
-        var price = Number(document.getElementById('newPrice').value) || 0;
-        if (name === '' || price <= 0) {
-            document.getElementById('prodMsg').innerText = 'Datos inválidos';
-            return;
-        }
-        var url = 'https://stock-flow-2e23e-default-rtdb.firebaseio.com/menu.json';
-        var body = { name: name, price: price };
-        fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) })
-            .then(function(res){ if(!res.ok) throw new Error('Error al crear'); return res.json(); })
-            .then(function(data){
-                document.getElementById('prodMsg').innerText = 'Producto creado';
-                // refrescar el menú para incluir el nuevo producto
-                cargarMenu();
-                document.getElementById('newName').value = '';
-                document.getElementById('newPrice').value = '';
-            })
-            .catch(function(err){
-                console.error('Crear producto error:', err);
-                document.getElementById('prodMsg').innerText = 'Error creando producto';
-            });
-    }
-</script>
+  </script>
 
 </body>
 </html>

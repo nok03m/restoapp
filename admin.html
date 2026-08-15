@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Panel de administración de productos — RestoApp.">
+  <title>Administración — RestoApp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page admin-page">
+
+  <!-- Barra de navegación -->
+  <nav class="navbar" aria-label="Navegación principal">
+    <div class="navbar__brand">
+      <span aria-hidden="true">🍽️</span>
+      <span>Resto<span>App</span></span>
+      <span class="badge badge--admin">Admin</span>
+    </div>
+    <div class="navbar__actions">
+      <a href="index.html" class="btn btn--ghost">Ir a pedidos</a>
+      <button id="logout-btn" class="btn btn--danger">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="container container--wide">
+      <div class="admin-layout">
+
+        <!-- Formulario de creación de producto -->
+        <div class="card">
+          <header class="card__header">
+            <div class="card__icon" aria-hidden="true">➕</div>
+            <div>
+              <h1 class="card__title">Crear producto</h1>
+              <p class="card__subtitle">Agrega nuevos platos al menú del restaurante</p>
+            </div>
+          </header>
+
+          <form id="product-form" class="form" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="product-name">Nombre del plato</label>
+                <input
+                  id="product-name"
+                  type="text"
+                  class="form-input"
+                  placeholder="Ej: Pasta Carbonara"
+                  required
+                >
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="product-price">Precio (USD)</label>
+                <input
+                  id="product-price"
+                  type="number"
+                  class="form-input"
+                  placeholder="Ej: 12.50"
+                  min="0.01"
+                  step="0.01"
+                  required
+                >
+              </div>
+            </div>
+
+            <div id="product-message" class="form-message" role="alert" aria-live="polite"></div>
+
+            <button id="create-btn" type="submit" class="btn btn--primary">
+              Crear producto
+            </button>
+          </form>
+        </div>
+
+        <!-- Vista previa del menú actual -->
+        <div class="card">
+          <header class="card__header">
+            <div class="card__icon" aria-hidden="true">📋</div>
+            <div>
+              <h2 class="card__title">Menú actual</h2>
+              <p class="card__subtitle">Platos disponibles cargados desde la base de datos</p>
+            </div>
+          </header>
+
+          <div class="form-group">
+            <label class="form-label" for="menu-preview">Platos disponibles</label>
+            <select id="menu-preview" class="form-select" disabled aria-label="Lista de platos actuales en el menú">
+              <option>Cargando menú…</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initAdminPage } from './js/admin.js';
+    await initAdminPage();
+  </script>
+
+</body>
+</html>
