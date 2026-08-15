@@ -19,7 +19,8 @@
       <span>Resto<span>App</span></span>
     </div>
     <div class="navbar__actions">
-      <a href="login.html" class="btn btn--ghost">Panel admin</a>
+      <a href="admin.html" class="btn btn--ghost">Panel admin</a>
+      <button id="logout-btn" class="btn btn--danger">Cerrar sesión</button>
     </div>
   </nav>
 
@@ -88,6 +89,10 @@
   <script type="module">
     import { loadMenu, getPriceByKey, getNameByKey } from './js/menu.js';
     import { calculateTotals, validateOrderForm, buildOrderSummaryHTML } from './js/pedidos.js';
+    import { requireAuth, logout } from './js/auth.js';
+
+    // Proteger página: obliga a estar autenticado
+    await requireAuth();
 
     const menuSelect  = document.getElementById('menu-select');
     const quantityInput = document.getElementById('quantity');
@@ -96,9 +101,16 @@
     const messageEl   = document.getElementById('order-message');
     const summaryEl   = document.getElementById('order-summary');
     const processBtn  = document.getElementById('process-btn');
+    const logoutBtn   = document.getElementById('logout-btn');
 
     // Cargar menú al iniciar la página
     await loadMenu(menuSelect);
+
+    // Event listener para cerrar sesión
+    logoutBtn?.addEventListener('click', async () => {
+      await logout();
+      window.location.href = 'login.html';
+    });
 
     // Autocompletar el precio al seleccionar un plato
     menuSelect.addEventListener('change', () => {
