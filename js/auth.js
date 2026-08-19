@@ -1,74 +1,171 @@
-/**
- * @file auth.js
- * @description Módulo de autenticación usando Supabase Auth.
- * Gestiona el ciclo de vida de la sesión (sign-in, sign-out, verificación).
- *
- * Supabase gestiona la sesión internamente en localStorage de forma segura;
- * no almacenamos tokens manualmente.
- */
+/* =============================================
+   auth.js - Lógica de autenticación y sesión
+   Maneja login form, logout, y gates de acceso.
+   Usa Firebase Authentication.
+   ============================================= */
 
-import { supabase } from './config.js';
+import { AuthService } from './services/dataAdapter.js';
+import { showToast, $ } from './utils/helpers.js';
 
-/**
- * Intenta autenticar al usuario con email y contraseña via Supabase Auth.
- *
- * @param {string} email    - Correo electrónico del usuario.
- * @param {string} password - Contraseña.
- * @returns {Promise<{ success: boolean, message: string }>}
- */
-export async function login(email, password) {
-  const trimmedEmail = email.trim();
-  const trimmedPass  = password.trim();
+// --- Inicialización ---
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('loginForm')) {
+    initLoginForm();
+  }
+  if (document.getElementById('adminGate')) {
+    initAdminGate();
+  }
+});
 
-  if (!trimmedEmail || !trimmedPass) {
-    return { success: false, message: 'Completa todos los campos.' };
+// ============================================
+// LOGIN FORM
+// ============================================
+
+function initLoginForm() {
+  const form = $('loginForm');
+  const submitBtn = $('loginSubmitBtn');
+  const btnText = $('loginBtnText');
+  const btnSpinner = $('loginBtnSpinner');
+
+  // Si ya está autenticado, redirigir al admin
+  if (AuthService.isAuthenticated()) {
+    window.location.href = '../pages/admin.html';
+    return;
   }
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email:    trimmedEmail,
-    password: trimmedPass,
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = ($('loginEmail').value || '').trim();
+    const password = $('loginPassword').value || '';
+
+    // Validación local
+    if (!email) {
+      showLoginError('Ingresa tu correo electrónico');
+      shakeLoginBox();
+      return;
+    }
+    if (!password) {
+      showLoginError('Ingresa tu contraseña');
+      shakeLoginBox();
+      return;
+    }
+
+    // Estado de carga
+    setLoginLoading(true);
+
+    const result = await AuthService.login(email, password);
+
+    if (result.success) {
+      hideLoginError();
+      showToast('Sesión iniciada correctamente', 'success');
+      // Pequeña pausa para que el usuario vea el toast
+      setTimeout(() => {
+        window.location.href = '../pages/admin.html';
+      }, 400);
+    } else {
+      showLoginError(result.error);
+      shakeLoginBox();
+      setLoginLoading(false);
+    }
   });
 
-  if (error) {
-    // Mensaje amigable en español según el tipo de error
-    const message = error.message.includes('Invalid login credentials')
-      ? 'Email o contraseña incorrectos.'
-      : `Error de autenticación: ${error.message}`;
-    return { success: false, message };
+  // Enter en cualquier campo envía el form
+  ['loginEmail', 'loginPassword'].forEach((id) => {
+    $(id)?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        form.dispatchEvent(new Event('submit'));
+      }
+    });
+  });
+}
+
+function setLoginLoading(isLoading) {
+  const submitBtn = $('loginSubmitBtn');
+  const btnText = $('loginBtnText');
+  const btnSpinner = $('loginBtnSpinner');
+
+  if (submitBtn) submitBtn.disabled = isLoading;
+  if (btnText) btnText.style.display = isLoading ? 'none' : '';
+  if (btnSpinner) btnSpinner.style.display = isLoading ? 'inline-block' : 'none';
+}
+
+function showLoginError(message) {
+  const errorDiv = $('loginError');
+  if (errorDiv) {
+    errorDiv.textContent = message;
+    errorDiv.classList.add('visible');
   }
-
-  return { success: true, message: 'Autenticación exitosa.' };
 }
 
-/**
- * Cierra la sesión actual en Supabase.
- *
- * @returns {Promise<void>}
- */
-export async function logout() {
-  await supabase.auth.signOut();
-}
-
-/**
- * Indica si hay una sesión activa en Supabase.
- *
- * @returns {Promise<boolean>}
- */
-export async function isAuthenticated() {
-  const { data: { session } } = await supabase.auth.getSession();
-  return session !== null;
-}
-
-/**
- * Protege una página: si no hay sesión activa, redirige al login.
- * Llamar con await al inicio de cualquier página protegida.
- *
- * @param {string} [redirectTo='login.html'] - Ruta de redirección.
- * @returns {Promise<void>}
- */
-export async function requireAuth(redirectTo = 'login.html') {
-  const authenticated = await isAuthenticated();
-  if (!authenticated) {
-    window.location.href = redirectTo;
+function hideLoginError() {
+  const errorDiv = $('loginError');
+  if (errorDiv) {
+    errorDiv.classList.remove('visible');
   }
+}
+
+function shakeLoginBox() {
+  const box = $('loginBox');
+  if (!box) return;
+  box.classList.add('login-shake');
+  setTimeout(() => box.classList.remove('login-shake'), 500);
+}
+
+// ============================================
+// ADMIN GATE
+// ============================================
+
+function initAdminGate() {
+  const adminGate = $('adminGate');
+  const adminUnauthorized = $('adminUnauthorized');
+  const navAuthBtn = $('navAuthBtn');
+
+  const session = AuthService.getSession();
+
+  if (!session) {
+    adminGate.style.display = 'none';
+    adminUnauthorized.style.display = 'flex';
+    if (navAuthBtn) navAuthBtn.style.display = '';
+  } else {
+    adminGate.style.display = '';
+    adminUnauthorized.style.display = 'none';
+    if (navAuthBtn) navAuthBtn.style.display = 'none';
+
+    populateAdminInfo(session);
+    initLogoutButton();
+  }
+}
+
+function populateAdminInfo(session) {
+  const adminName = $('adminName');
+  const adminRole = $('adminRole');
+  const adminAvatar = $('adminAvatar');
+  const adminWelcome = $('adminWelcome');
+
+  if (adminName) adminName.textContent = session.nombre;
+  if (adminRole) {
+    adminRole.textContent = session.rol === 'admin' ? 'Administrador' : 'Mesero';
+  }
+  if (adminAvatar) {
+    adminAvatar.textContent = session.nombre.charAt(0).toUpperCase();
+  }
+  if (adminWelcome) {
+    adminWelcome.textContent = `Bienvenido, ${session.nombre}`;
+  }
+}
+
+function initLogoutButton() {
+  const logoutBtn = $('logoutBtn');
+  if (!logoutBtn) return;
+
+  logoutBtn.addEventListener('click', async () => {
+    logoutBtn.disabled = true;
+    const originalText = logoutBtn.innerHTML;
+    logoutBtn.innerHTML = '&#10148; Cerrando...';
+
+    await AuthService.logout();
+    showToast('Sesión cerrada', 'info');
+    window.location.href = '../pages/login.html';
+  });
 }

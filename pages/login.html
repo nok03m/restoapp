@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RestoApp - Iniciar Sesión</title>
+  <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/cyberpunk.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+      <div class="navbar__brand">
+        <img src="../assets/logo.svg" alt="RestoApp" class="navbar__logo">
+        <span class="navbar__title neon-text-cyan">RestoApp</span>
+      </div>
+
+      <div class="navbar__links" id="navLinks">
+        <a href="../index.html" class="navbar__link" data-page="home">Inicio</a>
+        <a href="pedidos.html" class="navbar__link" data-page="pedidos">Pedidos</a>
+        <a href="admin.html" class="navbar__link navbar__link--admin" id="navAdminLink" data-page="admin">Panel Admin</a>
+        <a href="login.html" class="navbar__auth-btn" id="navAuthBtn">Iniciar Sesión</a>
+      </div>
+
+      <button class="navbar__hamburger" id="navbarHamburger" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+
+    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <main class="main-content">
+
+      <div class="login-wrapper">
+        <div class="login-box scale-in" id="loginBox">
+
+          <h2 class="login-box__title neon-text-cyan glitch-text">Resto<span class="neon-text-magenta">App</span></h2>
+          <p class="login-box__subtitle">Panel de administración - Acceso restringido</p>
+
+          <!-- Error message -->
+          <div class="login-box__error" id="loginError"></div>
+
+          <!-- Login form -->
+          <form id="loginForm" autocomplete="off" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="loginEmail">Correo electrónico</label>
+              <input
+                type="email"
+                id="loginEmail"
+                class="form-input"
+                placeholder="admin@restoapp.com"
+                required
+              >
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="loginPassword">Contraseña</label>
+              <input
+                type="password"
+                id="loginPassword"
+                class="form-input"
+                placeholder="••••••••"
+                required
+              >
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--block btn--lg" id="loginSubmitBtn">
+              <span id="loginBtnText">Iniciar Sesión</span>
+              <span id="loginBtnSpinner" class="login-spinner" style="display:none;"></span>
+            </button>
+          </form>
+
+          <p class="text-muted text-xs text-center mt-lg" style="letter-spacing: 0.5px;">
+            Solo usuarios autorizados pueden acceder al panel.
+          </p>
+
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+      <span>RestoApp &copy; 2026 | Taller de Refactorización y Uso de IA</span>
+    </footer>
+
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/main.js"></script>
+  <script type="module" src="../js/auth.js"></script>
+
+</body>
+</html>

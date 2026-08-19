@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RestoApp - Panel Administrador</title>
+  <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/cyberpunk.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+      <div class="navbar__brand">
+        <img src="../assets/logo.svg" alt="RestoApp" class="navbar__logo">
+        <span class="navbar__title neon-text-cyan">RestoApp</span>
+      </div>
+
+      <div class="navbar__links" id="navLinks">
+        <a href="../index.html" class="navbar__link" data-page="home">Inicio</a>
+        <a href="pedidos.html" class="navbar__link" data-page="pedidos">Pedidos</a>
+        <a href="admin.html" class="navbar__link navbar__link--admin" id="navAdminLink" data-page="admin">Panel Admin</a>
+        <a href="login.html" class="navbar__auth-btn" id="navAuthBtn" style="display:none;">Iniciar Sesión</a>
+      </div>
+
+      <button class="navbar__hamburger" id="navbarHamburger" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+
+    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <main class="main-content">
+
+      <!-- Gate de autenticación -->
+      <div id="adminGate" style="display: none;">
+
+        <!-- Welcome header -->
+        <div class="admin-welcome fade-in-up">
+          <div class="flex-between">
+            <div>
+              <h1 class="page-header__title neon-text-cyan" style="font-size: 1.6rem; margin-bottom: 0.25rem;">
+                Panel Admin
+              </h1>
+              <p class="page-header__subtitle" id="adminWelcome">Bienvenido, Admin</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cyber-divider" style="margin: 1rem 0 2rem;"></div>
+
+        <!-- Admin layout: sidebar + content -->
+        <div class="admin-layout">
+
+          <!-- Sidebar -->
+          <aside class="admin-sidebar slide-in-left">
+            <div class="admin-header mb-lg">
+              <div class="admin-header__info">
+                <div class="admin-header__avatar" id="adminAvatar">A</div>
+                <div>
+                  <div class="admin-header__name" id="adminName">Admin</div>
+                  <div class="admin-header__role" id="adminRole">Administrador</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-sidebar__title">Módulos</div>
+
+            <a href="#" class="admin-sidebar__link admin-sidebar__link--active" data-section="productos">
+              &#9733; Productos
+            </a>
+            <a href="#" class="admin-sidebar__link" data-section="facturacion">
+              &#9998; Facturación
+            </a>
+
+            <button class="logout-btn" id="logoutBtn">
+              &#10148; Cerrar Sesión
+            </button>
+          </aside>
+
+          <!-- Content area -->
+          <div class="admin-content">
+
+            <!-- Sección: Productos -->
+            <section id="adminSectionProductos" class="fade-in-up">
+              <div class="page-header" style="margin-bottom: 1.5rem;">
+                <h2 class="page-header__title neon-text-cyan" style="font-size: 1.5rem;">Gestión de Productos</h2>
+                <p class="page-header__subtitle">Administra el catálogo de productos del restaurante.</p>
+              </div>
+              <div id="adminProductosContainer">
+                <div class="flex-center" style="padding: 3rem;">
+                  <div class="loading-spinner"></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Sección: Facturación -->
+            <section id="adminSectionFacturacion" style="display: none;" class="fade-in-up">
+              <div class="page-header" style="margin-bottom: 1.5rem;">
+                <h2 class="page-header__title neon-text-magenta" style="font-size: 1.5rem;">Reporte de Facturación</h2>
+                <p class="page-header__subtitle">Consulta las facturas generadas por los pedidos.</p>
+              </div>
+              <div id="adminFacturacionContainer">
+                <div class="flex-center" style="padding: 3rem;">
+                  <div class="loading-spinner"></div>
+                </div>
+              </div>
+            </section>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Contenido cuando NO está autenticado -->
+      <div id="adminUnauthorized" class="flex-center" style="min-height: 50vh;">
+        <div class="card scale-in" style="text-align: center; max-width: 400px; padding: 2.5rem;">
+          <div class="empty-state__icon text-red" style="font-size: 3rem;">&#128274;</div>
+          <h3 class="card__title text-red mb-md" style="margin-top: 1rem;">Acceso No Autorizado</h3>
+          <p class="card__body mb-lg" style="line-height: 1.6;">Debes iniciar sesión para acceder al panel de administración.</p>
+          <a href="login.html" class="btn btn--primary btn--lg">Iniciar Sesión</a>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+      <span>RestoApp &copy; 2026 | Taller de Refactorización y Uso de IA</span>
+    </footer>
+
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modal container -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalContent">
+      <div class="modal__header">
+        <h3 class="modal__title" id="modalTitle"></h3>
+        <button class="modal__close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal__body" id="modalBody"></div>
+      <div class="modal__footer" id="modalFooter"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/main.js"></script>
+  <script type="module" src="../js/auth.js"></script>
+  <script type="module" src="../js/modules/admin/adminView.js"></script>
+  <script type="module" src="../js/modules/admin/productosView.js"></script>
+  <script type="module" src="../js/modules/admin/facturacionView.js"></script>
+
+</body>
+</html>

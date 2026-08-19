@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RestoApp - Pedidos</title>
+  <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/cyberpunk.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+      <div class="navbar__brand">
+        <img src="../assets/logo.svg" alt="RestoApp" class="navbar__logo">
+        <span class="navbar__title neon-text-cyan">RestoApp</span>
+      </div>
+
+      <div class="navbar__links" id="navLinks">
+        <a href="../index.html" class="navbar__link" data-page="home">Inicio</a>
+        <a href="pedidos.html" class="navbar__link" data-page="pedidos">Pedidos</a>
+        <a href="admin.html" class="navbar__link navbar__link--admin" id="navAdminLink" data-page="admin">Panel Admin</a>
+        <a href="login.html" class="navbar__auth-btn" id="navAuthBtn">Iniciar Sesión</a>
+      </div>
+
+      <button class="navbar__hamburger" id="navbarHamburger" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+
+    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <main class="main-content">
+
+      <!-- Page header -->
+      <div class="page-header fade-in-up">
+        <h1 class="page-header__title neon-text-cyan">Crear Pedido</h1>
+        <p class="page-header__subtitle">Selecciona productos del menú y arma el pedido del cliente.</p>
+      </div>
+
+      <div class="cyber-divider"></div>
+
+      <!-- Contenido del módulo pedidos (renderizado por JS) -->
+      <div id="pedidoContainer" class="fade-in-up stagger-2">
+        <!-- pedidoView.js inyectará aquí el contenido dinámico -->
+        <div class="flex-center" style="padding: 3rem;">
+          <div class="loading-spinner"></div>
+          <span class="text-muted text-sm" style="margin-left: 1rem;">Cargando menú...</span>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+      <span>RestoApp &copy; 2026 | Taller de Refactorización y Uso de IA</span>
+    </footer>
+
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modal container (compartido) -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalContent">
+      <div class="modal__header">
+        <h3 class="modal__title" id="modalTitle"></h3>
+        <button class="modal__close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal__body" id="modalBody"></div>
+      <div class="modal__footer" id="modalFooter"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/main.js"></script>
+  <script type="module" src="../js/auth.js"></script>
+  <script type="module" src="../js/modules/pedidos/pedidoView.js"></script>
+
+</body>
+</html>

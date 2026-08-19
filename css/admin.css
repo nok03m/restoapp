@@ -1,0 +1,306 @@
+/* =============================================
+   admin.css - Estilos específicos del Panel Admin
+   ============================================= */
+
+/* --- Login page --- */
+.login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--nav-height));
+}
+
+.login-box {
+  width: 100%;
+  max-width: 420px;
+  background-color: rgba(20, 20, 50, 0.75);
+  border: 1px solid var(--border-neon);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl);
+  box-shadow: var(--shadow-neon-cyan);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.login-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta), var(--neon-cyan));
+}
+
+.login-box__title {
+  font-family: var(--font-primary);
+  font-size: var(--fs-2xl);
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: var(--space-xs);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.login-box__subtitle {
+  font-family: var(--font-secondary);
+  font-size: var(--fs-xs);
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: var(--space-xl);
+  letter-spacing: 1px;
+}
+
+.login-box__error {
+  background-color: rgba(255, 23, 68, 0.1);
+  border: 1px solid var(--neon-red);
+  color: var(--neon-red);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-lg);
+  display: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.login-box__error.visible {
+  display: block;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Login shake animation */
+@keyframes loginShake {
+  0%, 100% { transform: translateX(0); }
+  10%, 50%, 90% { transform: translateX(-4px); }
+  30%, 70% { transform: translateX(4px); }
+}
+
+.login-shake {
+  animation: loginShake 0.4s ease-out;
+}
+
+/* Login spinner */
+.login-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- Admin header --- */
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+}
+
+.admin-header__info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.admin-header__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--neon-magenta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--neon-magenta);
+  background-color: rgba(255, 0, 222, 0.1);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.admin-header__name {
+  font-family: var(--font-primary);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text-heading);
+}
+
+.admin-header__role {
+  font-family: var(--font-secondary);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- Stats cards --- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+
+.stat-card {
+  background-color: rgba(20, 20, 50, 0.7);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.stat-card:hover {
+  border-color: var(--border-neon);
+  box-shadow: var(--shadow-neon-cyan);
+}
+
+.stat-card__label {
+  font-family: var(--font-secondary);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.stat-card__value {
+  font-family: var(--font-primary);
+  font-size: var(--fs-3xl);
+  font-weight: 900;
+  color: var(--neon-cyan);
+}
+
+.stat-card__value--magenta { color: var(--neon-magenta); }
+.stat-card__value--yellow { color: var(--neon-yellow); }
+.stat-card__value--green { color: var(--neon-green); }
+
+/* --- Admin toolbar (acciones sobre tablas) --- */
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.admin-toolbar__search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.admin-toolbar__search .form-input {
+  width: 280px;
+}
+
+/* --- Filtros de tabla --- */
+.table-filters {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.table-filters .btn--filter {
+  font-size: var(--fs-xs);
+  padding: 0.35rem 0.8rem;
+}
+
+.table-filters .btn--filter.active {
+  background-color: var(--neon-cyan);
+  color: var(--bg-primary);
+  border-color: var(--neon-cyan);
+}
+
+/* --- Admin table overrides --- */
+.admin-table .badge {
+  font-size: 0.65rem;
+}
+
+/* --- Logout button --- */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  margin-top: var(--space-lg);
+  font-family: var(--font-secondary);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--neon-red);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 23, 68, 0.1);
+  border-color: var(--neon-red);
+}
+
+/* --- Factura preview --- */
+.factura-preview {
+  background-color: rgba(26, 26, 62, 0.7);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  font-family: var(--font-secondary);
+  max-width: 400px;
+  margin: 0 auto;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.factura-preview__header {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px dashed var(--border-dim);
+}
+
+.factura-preview__lines {
+  margin-bottom: var(--space-md);
+}
+
+.factura-preview__line {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+
+.factura-preview__totals {
+  border-top: 1px dashed var(--border-dim);
+  padding-top: var(--space-md);
+}
+
+.factura-preview__total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
+}
+
+.factura-preview__total-row--final {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--neon-yellow);
+  border-top: 1px solid var(--border-neon);
+  padding-top: var(--space-sm);
+  margin-top: var(--space-sm);
+}

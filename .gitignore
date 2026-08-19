@@ -1,15 +1,16 @@
-# Variables de entorno — contiene las keys de Supabase
-js/env.js
-.env
-
-# Dependencias (si se usa npm en el futuro)
+RestoApp - Cyberpunk Neon
+# Build artifacts
 node_modules/
+dist/
 
-# Sistema operativo
+# OS files
 .DS_Store
 Thumbs.db
 
-# Editores
-.vscode/settings.json
-*.suo
-*.user
+# Editor
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local

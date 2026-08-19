@@ -3,160 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sistema de toma de pedidos para meseros — RestoApp.">
-  <title>Pedidos — RestoApp</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>RestoApp - Inicio</title>
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/cyberpunk.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
 </head>
-<body class="page pedido-page">
+<body>
 
-  <!-- Barra de navegación -->
-  <nav class="navbar" aria-label="Navegación principal">
-    <div class="navbar__brand">
-      <span aria-hidden="true">🍽️</span>
-      <span>Resto<span>App</span></span>
-    </div>
-    <div class="navbar__actions">
-      <a href="admin.html" class="btn btn--ghost">Panel admin</a>
-      <button id="logout-btn" class="btn btn--danger">Cerrar sesión</button>
-    </div>
-  </nav>
+  <div class="app-wrapper">
 
-  <main class="main">
-    <div class="container container--wide">
-      <div class="card">
-
-        <header class="card__header">
-          <div class="card__icon" aria-hidden="true">🧾</div>
-          <div>
-            <h1 class="card__title">Tomar pedido</h1>
-            <p class="card__subtitle">Selecciona el plato, ingresa la cantidad y procesa el pedido</p>
-          </div>
-        </header>
-
-        <form id="order-form" class="form" novalidate>
-          <div class="form-group">
-            <label class="form-label" for="menu-select">Plato</label>
-            <select id="menu-select" class="form-select" required aria-label="Selección de plato del menú">
-              <option value="">Cargando menú…</option>
-            </select>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="quantity">Cantidad</label>
-              <input
-                id="quantity"
-                type="number"
-                class="form-input"
-                placeholder="Ej: 2"
-                min="1"
-                step="1"
-                required
-              >
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="unit-price">Precio unitario (USD)</label>
-              <input
-                id="unit-price"
-                type="number"
-                class="form-input"
-                placeholder="Se autocompleta"
-                min="0"
-                step="0.01"
-                readonly
-                aria-readonly="true"
-              >
-            </div>
-          </div>
-
-          <div id="order-message" class="form-message" role="alert" aria-live="polite"></div>
-
-          <button id="process-btn" type="submit" class="btn btn--primary">
-            Procesar pedido
-          </button>
-        </form>
-
-        <!-- Resumen del pedido procesado -->
-        <div id="order-summary" class="order-summary" role="region" aria-label="Resumen del pedido" aria-live="polite"></div>
-
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+      <div class="navbar__brand">
+        <img src="assets/logo.svg" alt="RestoApp" class="navbar__logo">
+        <span class="navbar__title neon-text-cyan">RestoApp</span>
       </div>
-    </div>
-  </main>
 
-  <script type="module">
-    import { loadMenu, getPriceByKey, getNameByKey } from './js/menu.js';
-    import { calculateTotals, validateOrderForm, buildOrderSummaryHTML } from './js/pedidos.js';
-    import { requireAuth, logout } from './js/auth.js';
+      <div class="navbar__links" id="navLinks">
+        <a href="index.html" class="navbar__link" data-page="home">Inicio</a>
+        <a href="pages/pedidos.html" class="navbar__link" data-page="pedidos">Pedidos</a>
+        <a href="pages/admin.html" class="navbar__link navbar__link--admin" id="navAdminLink" data-page="admin">Panel Admin</a>
+        <a href="pages/login.html" class="navbar__auth-btn" id="navAuthBtn">Iniciar Sesión</a>
+      </div>
 
-    // Proteger página: obliga a estar autenticado
-    await requireAuth();
+      <button class="navbar__hamburger" id="navbarHamburger" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
 
-    const menuSelect  = document.getElementById('menu-select');
-    const quantityInput = document.getElementById('quantity');
-    const unitPriceInput = document.getElementById('unit-price');
-    const orderForm   = document.getElementById('order-form');
-    const messageEl   = document.getElementById('order-message');
-    const summaryEl   = document.getElementById('order-summary');
-    const processBtn  = document.getElementById('process-btn');
-    const logoutBtn   = document.getElementById('logout-btn');
+    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <main class="main-content">
 
-    // Cargar menú al iniciar la página
-    await loadMenu(menuSelect);
+      <!-- Hero Section -->
+      <section class="home-hero fade-in-up" style="padding: 2rem 0 3rem;">
+        <h1 class="page-header__title neon-text-cyan glitch-text" style="font-size: 3.2rem; margin-bottom: 0.5rem;">
+          Resto<span class="neon-text-magenta">App</span>
+        </h1>
+        <p class="page-header__subtitle" style="font-size: 1.05rem; max-width: 520px; margin: 0.8rem auto 0; line-height: 1.7;">
+          Sistema de gestión de pedidos y facturación para restaurantes.
+          Diseñado con estética Cyberpunk y arquitectura modular.
+        </p>
+      </section>
 
-    // Event listener para cerrar sesión
-    logoutBtn?.addEventListener('click', async () => {
-      await logout();
-      window.location.href = 'login.html';
-    });
+      <!-- Divider -->
+      <div class="cyber-divider" style="margin: 1rem 0 3.5rem;"></div>
 
-    // Autocompletar el precio al seleccionar un plato
-    menuSelect.addEventListener('change', () => {
-      const selectedKey = menuSelect.value;
-      unitPriceInput.value = selectedKey ? getPriceByKey(selectedKey).toFixed(2) : '';
-      clearFeedback();
-    });
+      <!-- Features grid -->
+      <section class="grid grid-3" style="gap: 2rem;" id="featuresGrid">
+        <div class="card fade-in-up stagger-1" style="padding: 2rem;">
+          <div class="card__header">
+            <span class="text-cyan text-xl">&#9881;</span>
+          </div>
+          <h3 class="card__title" style="margin-bottom: 0.75rem;">Gestión de Pedidos</h3>
+          <p class="card__body" style="line-height: 1.7;">
+            Crea, edita y gestiona pedidos de clientes de forma rápida e intuitiva. Calcula subtotales, IVA y totales en tiempo real.
+          </p>
+          <div class="card__footer">
+            <a href="pages/pedidos.html" class="btn btn--primary btn--sm">Crear Pedido</a>
+          </div>
+        </div>
 
-    // Procesar el pedido al enviar el formulario
-    orderForm.addEventListener('submit', (event) => {
-      event.preventDefault();
+        <div class="card fade-in-up stagger-2" style="padding: 2rem;">
+          <div class="card__header">
+            <span class="text-magenta text-xl">&#9733;</span>
+          </div>
+          <h3 class="card__title" style="margin-bottom: 0.75rem;">Catálogo de Productos</h3>
+          <p class="card__body" style="line-height: 1.7;">
+            Administra tu menú completo. Agrega, edita o elimina productos del catálogo con un panel seguro y modular.
+          </p>
+          <div class="card__footer">
+            <a href="pages/login.html" class="btn btn--secondary btn--sm">Acceder al Admin</a>
+          </div>
+        </div>
 
-      const formData = {
-        itemKey:   menuSelect.value,
-        quantity:  parseFloat(quantityInput.value),
-        unitPrice: parseFloat(unitPriceInput.value),
-      };
+        <div class="card fade-in-up stagger-3" style="padding: 2rem;">
+          <div class="card__header">
+            <span class="text-yellow text-xl">&#9998;</span>
+          </div>
+          <h3 class="card__title" style="margin-bottom: 0.75rem;">Facturación</h3>
+          <p class="card__body" style="line-height: 1.7;">
+            Genera facturas detalladas a partir de los pedidos. Visualiza reportes de ventas con datos consolidados.
+          </p>
+          <div class="card__footer">
+            <a href="pages/admin.html" class="btn btn--ghost btn--sm">Ver Reportes</a>
+          </div>
+        </div>
+      </section>
 
-      const validation = validateOrderForm(formData);
-      if (!validation.valid) {
-        showMessage(validation.message, 'error');
-        return;
-      }
+      <!-- Separator -->
+      <div class="cyber-divider" style="margin: 3.5rem 0;"></div>
 
-      try {
-        const totals = calculateTotals(formData.quantity, formData.unitPrice);
-        const itemName = getNameByKey(formData.itemKey);
-        summaryEl.innerHTML = buildOrderSummaryHTML(itemName, totals);
-        clearFeedback();
-        orderForm.reset();
-        unitPriceInput.value = '';
-      } catch (err) {
-        showMessage(err.message, 'error');
-      }
-    });
+      <!-- Info section -->
+      <section class="fade-in-up stagger-4">
+        <div class="card" style="text-align: center; padding: 2.5rem 2rem;">
+          <h3 class="card__title neon-text-cyan" style="margin-bottom: 1rem;">Arquitectura del Proyecto</h3>
+          <p class="card__body" style="max-width: 580px; margin: 0 auto; line-height: 1.8;">
+            MPA modular con HTML5 semántico, CSS Grid/Flexbox nativo y JavaScript ES6+.
+            Capa de datos abstraída en servicios independientes, lista para integración con Supabase.
+          </p>
+        </div>
+      </section>
 
-    function showMessage(message, type) {
-      messageEl.textContent = message;
-      messageEl.className = `form-message form-message--${type}`;
-    }
+    </main>
 
-    function clearFeedback() {
-      messageEl.textContent = '';
-      messageEl.className = 'form-message';
-    }
-  </script>
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+      <span>RestoApp &copy; 2026 | Taller de Refactorización y Uso de IA</span>
+    </footer>
+
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/auth.js"></script>
 
 </body>
 </html>
