@@ -1,9 +1,10 @@
 /* =============================================
    pageTransition.js - Transiciones glitch MPA
-   Destruye → Navega → Reconstruye
+   Señal digital: destrucción → reconstrucción
    ============================================= */
 
-const DESTROY_DURATION = 700;
+const DESTROY_DURATION = 650;
+const NAV_DELAY = 580;
 
 export function initPageTransitions() {
   createOverlay();
@@ -26,14 +27,17 @@ function interceptLinks() {
     const href = link.getAttribute('href');
     if (!href) return;
 
-    // Solo links internos (no external, no #, no javascript:)
     if (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('javascript:')) return;
-
-    // No interferir si tiene data-no-transition
+    if (href.startsWith('#')) return;
     if (link.hasAttribute('data-no-transition')) return;
-
-    // Ignorar si ya estamos en transición
     if (document.body.classList.contains('glitch-destroy')) return;
+
+    // No transición si es el mismo link
+    try {
+      const current = new URL(window.location.href);
+      const target = new URL(href, window.location.href);
+      if (current.pathname === target.pathname) return;
+    } catch {}
 
     e.preventDefault();
     navigateWithGlitch(href);
@@ -44,23 +48,39 @@ function navigateWithGlitch(href) {
   const overlay = document.getElementById('glitchTransitionOverlay');
   const body = document.body;
 
-  // Activar overlay
+  // Flash dinámico en momentos clave
+  flashAt(overlay, 150);
+  flashAt(overlay, 350);
+  flashAt(overlay, 500);
+
+  // Activar overlay (scanlines + blocks)
   overlay.classList.add('active');
 
-  // Marcar que venimos de transición
+  // Marcar transición
   sessionStorage.setItem('glitchTransition', '1');
 
-  // Fase 1: Destrucción
+  // Destrucción
   body.classList.add('glitch-destroy');
 
+  // Navegar después de la destrucción
   setTimeout(() => {
-    // Navegar
     window.location.href = href;
-  }, DESTROY_DURATION);
+  }, NAV_DELAY);
+}
+
+function flashAt(overlay, delay) {
+  setTimeout(() => {
+    overlay.classList.remove('flash');
+    void overlay.offsetWidth;
+    overlay.classList.add('flash');
+  }, delay);
+
+  setTimeout(() => {
+    overlay.classList.remove('flash');
+  }, delay + 600);
 }
 
 function playEntryAnimation() {
-  // Si venimos de una transición (sessionStorage flag), reproducir reconstrucción
   const wasTransitioning = sessionStorage.getItem('glitchTransition');
 
   if (wasTransitioning) {
@@ -69,7 +89,6 @@ function playEntryAnimation() {
   }
 }
 
-// Llamar antes de que la página se descargue para marcar la transición
 window.addEventListener('beforeunload', () => {
   if (document.body.classList.contains('glitch-destroy')) {
     sessionStorage.setItem('glitchTransition', '1');
