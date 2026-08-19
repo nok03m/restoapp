@@ -4,22 +4,18 @@
 
 /* --- Layout principal --- */
 .app-wrapper {
-  display: grid;
-  grid-template-rows: var(--nav-height) 1fr auto;
-  grid-template-areas:
-    "nav"
-    "main"
-    "footer";
-  min-height: 100vh;
-  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* --- Navbar --- */
 .navbar {
-  grid-area: nav;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: var(--nav-height);
   padding: 0 var(--space-xl);
   background-color: rgba(2, 2, 12, 0.8);
   border-bottom: 1px solid rgba(0, 255, 255, 0.1);
@@ -149,13 +145,11 @@
 
 /* --- Main Content --- */
 .main-content {
-  grid-area: main;
+  flex: 1;
   padding: var(--space-3xl) var(--space-xl);
   max-width: var(--max-width);
   margin: 0 auto;
   width: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 /* --- Grid helpers --- */
@@ -282,7 +276,7 @@
 
 /* --- Footer --- */
 .footer {
-  grid-area: footer;
+  flex-shrink: 0;
   text-align: center;
   padding: var(--space-xl) var(--space-lg);
   border-top: 1px solid rgba(0, 255, 255, 0.08);
@@ -293,7 +287,6 @@
   background-color: rgba(2, 2, 12, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  margin-top: auto;
 }
 
 /* =====================
