@@ -6,8 +6,11 @@ import { AuthService } from './services/dataAdapter.js';
 import { closeModal } from './utils/helpers.js';
 import { initRippleEffects } from './utils/animations.js';
 import { initStarfield } from './utils/starfield.js';
+import { initPageTransitions } from './utils/pageTransition.js';
 
 // --- Inicialización global ---
+initPageTransitions();
+
 document.addEventListener('DOMContentLoaded', () => {
   initStarfield();
   initMobileMenu();

@@ -390,8 +390,239 @@ body::before {
 }
 
 body {
-  animation: pageReveal 0.4s ease-out;
   position: relative;
+}
+
+/* --- GLITCH PAGE TRANSITION --- */
+
+/* Overlay de transición */
+.glitch-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.glitch-transition-overlay.active {
+  opacity: 1;
+}
+
+/* Capa de destrucción: horizontal slices + chromatic */
+.glitch-transition-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(0, 255, 255, 0.03) 2px,
+      rgba(0, 255, 255, 0.03) 4px
+    );
+  animation: glitchOverlayScanlines 0.1s steps(3) infinite;
+  mix-blend-mode: screen;
+}
+
+/* vortex de color blocks */
+.glitch-transition-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg,
+      transparent 0%,
+      rgba(0, 255, 255, 0.15) 15%,
+      transparent 16%,
+      transparent 30%,
+      rgba(102, 0, 204, 0.2) 31%,
+      transparent 32%,
+      transparent 50%,
+      rgba(0, 255, 0, 0.12) 51%,
+      transparent 52%,
+      transparent 70%,
+      rgba(0, 255, 255, 0.18) 71%,
+      transparent 72%,
+      transparent 85%,
+      rgba(102, 0, 204, 0.15) 86%,
+      transparent 87%
+    );
+  animation: glitchOverlayBlocks 0.15s steps(2) infinite;
+}
+
+@keyframes glitchOverlayScanlines {
+  0%   { transform: translateX(0); opacity: 0.5; }
+  33%  { transform: translateX(-3px); opacity: 0.8; }
+  66%  { transform: translateX(2px); opacity: 0.6; }
+  100% { transform: translateX(0); opacity: 0.7; }
+}
+
+@keyframes glitchOverlayBlocks {
+  0%   { transform: translateX(0) skewX(0deg); }
+  25%  { transform: translateX(-8px) skewX(-2deg); }
+  50%  { transform: translateX(5px) skewX(1deg); }
+  75%  { transform: translateX(-3px) skewX(-1deg); }
+  100% { transform: translateX(0) skewX(0deg); }
+}
+
+/* --- DESTRUCTION: el body se destruye --- */
+.glitch-destroy {
+  animation: glitchDestroyBody 0.7s ease-in forwards;
+}
+
+@keyframes glitchDestroyBody {
+  0% {
+    filter: none;
+    transform: none;
+    clip-path: none;
+  }
+  8% {
+    filter: hue-rotate(90deg) saturate(3) brightness(1.5);
+    transform: translate(-5px, 2px) skewX(-2deg);
+    clip-path: inset(10% 0 30% 0);
+  }
+  12% {
+    filter: hue-rotate(-45deg) saturate(2);
+    transform: translate(8px, -3px) skewX(3deg);
+    clip-path: inset(40% 0 10% 0);
+  }
+  18% {
+    filter: hue-rotate(180deg) saturate(4) brightness(2);
+    transform: translate(-12px, 0) skewX(-4deg);
+    clip-path: inset(5% 0 55% 0);
+  }
+  22% {
+    filter: hue-rotate(-90deg) saturate(1.5);
+    transform: translate(15px, 3px) skewX(5deg);
+    clip-path: inset(60% 0 5% 0);
+  }
+  30% {
+    filter: hue-rotate(45deg) saturate(5) brightness(2.5) contrast(2);
+    transform: translate(-20px, -5px) skewX(-6deg);
+    clip-path: inset(15% 0 40% 0);
+  }
+  35% {
+    filter: saturate(0) brightness(3) contrast(3);
+    transform: translate(25px, 2px) skewX(8deg);
+    clip-path: inset(50% 0 15% 0);
+  }
+  45% {
+    filter: hue-rotate(270deg) saturate(6) brightness(0.5) contrast(4);
+    transform: translate(-30px, 0) skewX(-10deg) scaleY(1.02);
+    clip-path: inset(20% 0 35% 0);
+  }
+  55% {
+    filter: invert(1) saturate(3) brightness(2);
+    transform: translate(15px, -8px) skewX(6deg) scaleY(0.98);
+    clip-path: inset(5% 0 60% 0);
+  }
+  65% {
+    filter: hue-rotate(-180deg) saturate(8) brightness(0.3);
+    transform: translate(-40px, 5px) skewX(-12deg);
+    clip-path: inset(30% 0 20% 0);
+  }
+  75% {
+    filter: saturate(0) brightness(4) contrast(5);
+    transform: translate(35px, -3px) skewX(15deg) scaleY(1.05);
+    clip-path: inset(0);
+  }
+  85% {
+    filter: invert(1) hue-rotate(90deg) brightness(3);
+    transform: translate(-20px, 0) skewX(-8deg);
+    opacity: 0.5;
+  }
+  92% {
+    filter: brightness(5) saturate(0);
+    transform: translate(0) scale(1.02);
+    opacity: 0.2;
+  }
+  100% {
+    filter: brightness(10) saturate(0);
+    transform: none;
+    opacity: 0;
+    clip-path: inset(0);
+  }
+}
+
+/* --- RECONSTRUCTION: el body se reconstruye --- */
+.glitch-reconstruct {
+  animation: glitchReconstructBody 0.8s ease-out forwards;
+}
+
+@keyframes glitchReconstructBody {
+  0% {
+    opacity: 0;
+    filter: brightness(8) saturate(0);
+    transform: scale(1.03);
+    clip-path: inset(0);
+  }
+  8% {
+    opacity: 0.15;
+    filter: brightness(4) saturate(0) contrast(3);
+    transform: translate(20px, 0) skewX(8deg);
+    clip-path: inset(40% 0 20% 0);
+  }
+  15% {
+    opacity: 0.3;
+    filter: hue-rotate(90deg) saturate(3) brightness(2);
+    transform: translate(-15px, 3px) skewX(-5deg);
+    clip-path: inset(10% 0 50% 0);
+  }
+  22% {
+    opacity: 0.45;
+    filter: hue-rotate(-60deg) saturate(2) brightness(1.5);
+    transform: translate(10px, -2px) skewX(3deg);
+    clip-path: inset(55% 0 10% 0);
+  }
+  30% {
+    opacity: 0.55;
+    filter: hue-rotate(180deg) saturate(4) brightness(1.8) contrast(1.5);
+    transform: translate(-25px, 0) skewX(-7deg);
+    clip-path: inset(20% 0 30% 0);
+  }
+  40% {
+    opacity: 0.7;
+    filter: hue-rotate(-90deg) saturate(1.5) brightness(1.3);
+    transform: translate(12px, 2px) skewX(4deg);
+    clip-path: inset(35% 0 15% 0);
+  }
+  50% {
+    opacity: 0.8;
+    filter: saturate(2) brightness(1.2);
+    transform: translate(-8px, -1px) skewX(-2deg);
+    clip-path: inset(5% 0 40% 0);
+  }
+  60% {
+    opacity: 0.88;
+    filter: hue-rotate(45deg) saturate(1.3) brightness(1.1);
+    transform: translate(5px, 1px) skewX(1deg);
+    clip-path: inset(25% 0 25% 0);
+  }
+  70% {
+    opacity: 0.93;
+    filter: saturate(1.1) brightness(1.05);
+    transform: translate(-3px, 0) skewX(-0.5deg);
+    clip-path: inset(10% 0 10% 0);
+  }
+  80% {
+    opacity: 0.97;
+    filter: none;
+    transform: translate(1px, 0);
+    clip-path: inset(3% 0 3% 0);
+  }
+  90% {
+    opacity: 1;
+    filter: none;
+    transform: translate(0);
+    clip-path: inset(1% 0 1% 0);
+  }
+  100% {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    clip-path: inset(0);
+  }
 }
 
 /* --- Ambient nebula glows (fijos, sutiles) --- */
