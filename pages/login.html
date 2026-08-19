@@ -26,6 +26,7 @@
       <div class="navbar__links" id="navLinks">
         <a href="../index.html" class="navbar__link" data-page="home">Inicio</a>
         <a href="pedidos.html" class="navbar__link" data-page="pedidos">Pedidos</a>
+        <a href="reportes.html" class="navbar__link navbar__link--facturas" id="navFacturasLink" data-page="reportes">Reportes</a>
         <a href="admin.html" class="navbar__link navbar__link--admin" id="navAdminLink" data-page="admin">Panel Admin</a>
         <a href="login.html" class="navbar__auth-btn" id="navAuthBtn">Iniciar Sesión</a>
       </div>
@@ -43,7 +44,7 @@
       <div class="login-wrapper">
         <div class="login-box scale-in" id="loginBox">
 
-          <h2 class="login-box__title neon-text-cyan glitch-text">Resto<span class="neon-text-magenta">App</span></h2>
+          <h2 class="login-box__title neon-text-cyan glitch-text" data-text="RestoApp">Resto<span class="neon-text-magenta">App</span></h2>
           <p class="login-box__subtitle">Panel de administración - Acceso restringido</p>
 
           <!-- Error message -->
@@ -82,6 +83,23 @@
           <p class="text-muted text-xs text-center mt-lg" style="letter-spacing: 0.5px;">
             Solo usuarios autorizados pueden acceder al panel.
           </p>
+
+          <div class="login-box__test-creds" style="
+            margin-top: 1.25rem;
+            padding: 0.85rem 1rem;
+            border: 1px solid rgba(0, 255, 255, 0.25);
+            border-radius: 8px;
+            background: rgba(0, 255, 255, 0.05);
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.7);
+            letter-spacing: 0.3px;
+          ">
+            <p style="margin: 0 0 0.5rem; font-weight: 600; color: #0ff; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px;">Credenciales de prueba</p>
+            <p style="margin: 0; line-height: 1.7;">
+              <span style="color: rgba(255,255,255,0.45);">Email:</span> <span style="color: #e0e0e0;">atropos@mail.com</span><br>
+              <span style="color: rgba(255,255,255,0.45);">Contraseña:</span> <span style="color: #e0e0e0;">Acdc.x27</span>
+            </p>
+          </div>
 
         </div>
       </div>

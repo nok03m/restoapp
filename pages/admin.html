@@ -26,8 +26,9 @@
       <div class="navbar__links" id="navLinks">
         <a href="../index.html" class="navbar__link" data-page="home">Inicio</a>
         <a href="pedidos.html" class="navbar__link" data-page="pedidos">Pedidos</a>
+        <a href="reportes.html" class="navbar__link navbar__link--facturas" id="navFacturasLink" data-page="reportes">Reportes</a>
         <a href="admin.html" class="navbar__link navbar__link--admin" id="navAdminLink" data-page="admin">Panel Admin</a>
-        <a href="login.html" class="navbar__auth-btn" id="navAuthBtn" style="display:none;">Iniciar Sesión</a>
+        <a href="login.html" class="navbar__auth-btn" id="navAuthBtn">Iniciar Sesión</a>
       </div>
 
       <button class="navbar__hamburger" id="navbarHamburger" aria-label="Abrir menú">
@@ -47,7 +48,7 @@
         <div class="admin-welcome fade-in-up">
           <div class="flex-between">
             <div>
-              <h1 class="page-header__title neon-text-cyan" style="font-size: 1.6rem; margin-bottom: 0.25rem;">
+              <h1 class="page-header__title neon-text-cyan glitch-text" data-text="Panel Admin" style="font-size: 1.6rem; margin-bottom: 0.25rem;">
                 Panel Admin
               </h1>
               <p class="page-header__subtitle" id="adminWelcome">Bienvenido, Admin</p>
@@ -92,7 +93,7 @@
             <!-- Sección: Productos -->
             <section id="adminSectionProductos" class="fade-in-up">
               <div class="page-header" style="margin-bottom: 1.5rem;">
-                <h2 class="page-header__title neon-text-cyan" style="font-size: 1.5rem;">Gestión de Productos</h2>
+                <h2 class="page-header__title neon-text-cyan glitch-text" data-text="Gestión de Productos" style="font-size: 1.5rem;">Gestión de Productos</h2>
                 <p class="page-header__subtitle">Administra el catálogo de productos del restaurante.</p>
               </div>
               <div id="adminProductosContainer">
@@ -105,7 +106,7 @@
             <!-- Sección: Facturación -->
             <section id="adminSectionFacturacion" style="display: none;" class="fade-in-up">
               <div class="page-header" style="margin-bottom: 1.5rem;">
-                <h2 class="page-header__title neon-text-magenta" style="font-size: 1.5rem;">Reporte de Facturación</h2>
+                <h2 class="page-header__title neon-text-magenta glitch-text" data-text="Reporte de Facturación" style="font-size: 1.5rem;">Reporte de Facturación</h2>
                 <p class="page-header__subtitle">Consulta las facturas generadas por los pedidos.</p>
               </div>
               <div id="adminFacturacionContainer">

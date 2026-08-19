@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RestoApp - Reportes</title>
+  <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/cyberpunk.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/reportes.css">
+</head>
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+      <div class="navbar__brand">
+        <img src="../assets/logo.svg" alt="RestoApp" class="navbar__logo">
+        <span class="navbar__title neon-text-cyan">RestoApp</span>
+      </div>
+
+      <div class="navbar__links" id="navLinks">
+        <a href="../index.html" class="navbar__link" data-page="home">Inicio</a>
+        <a href="pedidos.html" class="navbar__link" data-page="pedidos">Pedidos</a>
+        <a href="reportes.html" class="navbar__link navbar__link--facturas" id="navFacturasLink" data-page="reportes">Reportes</a>
+        <a href="admin.html" class="navbar__link navbar__link--admin" id="navAdminLink" data-page="admin">Panel Admin</a>
+        <a href="login.html" class="navbar__auth-btn" id="navAuthBtn">Iniciar Sesión</a>
+      </div>
+
+      <button class="navbar__hamburger" id="navbarHamburger" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+
+    <!-- ========== CONTENIDO PRINCIPAL ========== -->
+    <main class="main-content">
+
+      <!-- Gate de autenticación -->
+      <div id="reportesGate" style="display: none;">
+
+        <!-- Page header -->
+        <div class="page-header fade-in-up">
+          <h1 class="page-header__title neon-text-cyan glitch-text" data-text="Reportes">Reportes</h1>
+          <p class="page-header__subtitle">Análisis general del negocio, productos, clientes y tendencias de venta.</p>
+        </div>
+
+        <div class="cyber-divider"></div>
+
+        <!-- KPI Cards -->
+        <div id="reportesKpiRow" class="reportes-kpi-row"></div>
+
+        <!-- Row 1: Productos más vendidos + Distribución por método de pago -->
+        <div class="reportes-grid">
+
+          <!-- Productos más vendidos (bar chart CSS) -->
+          <div class="reportes-chart-card reportes-scanline fade-in-up stagger-1">
+            <div class="reportes-chart-card__title">Productos Más Vendidos</div>
+            <div id="reportesTopProducts"></div>
+          </div>
+
+          <!-- Donut: Método de pago -->
+          <div class="reportes-chart-card reportes-scanline fade-in-up stagger-2">
+            <div class="reportes-chart-card__title">Métodos de Pago</div>
+            <div id="reportesPaymentDonut"></div>
+          </div>
+
+        </div>
+
+        <div class="reportes-neon-line"></div>
+
+        <!-- Row 2: Clientes más activos + Ventas por categoría -->
+        <div class="reportes-grid">
+
+          <!-- Clientes más activos (ranking) -->
+          <div class="reportes-chart-card reportes-scanline fade-in-up stagger-3">
+            <div class="reportes-chart-card__title">Clientes Más Activos</div>
+            <div id="reportesTopClients"></div>
+          </div>
+
+          <!-- Ventas por categoría (bar chart) -->
+          <div class="reportes-chart-card reportes-scanline fade-in-up stagger-4">
+            <div class="reportes-chart-card__title">Ventas por Categoría</div>
+            <div id="reportesCategoryBars"></div>
+          </div>
+
+        </div>
+
+        <div class="reportes-neon-line"></div>
+
+        <!-- Row 3: Tendencia de ventas (canvas chart) -->
+        <div class="reportes-grid reportes-grid--full">
+          <div class="reportes-chart-card reportes-scanline fade-in-up stagger-5">
+            <div class="reportes-chart-card__title">Tendencia de Ventas (Últimos 30 Días)</div>
+            <div class="reportes-canvas-wrap">
+              <canvas id="reportesTrendChart" height="260"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="reportes-neon-line"></div>
+
+        <!-- Row 4: Últimos pedidos -->
+        <div class="reportes-grid reportes-grid--full">
+          <div class="reportes-chart-card fade-in-up stagger-6">
+            <div class="reportes-chart-card__title">Últimos Pedidos Realizados</div>
+            <div id="reportesRecentOrders"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Contenido cuando NO está autenticado -->
+      <div id="reportesUnauthorized" class="flex-center" style="min-height: 50vh;">
+        <div class="card scale-in" style="text-align: center; max-width: 400px; padding: 2.5rem;">
+          <div class="empty-state__icon text-red" style="font-size: 3rem;">&#128274;</div>
+          <h3 class="card__title text-red mb-md" style="margin-top: 1rem;">Acceso No Autorizado</h3>
+          <p class="card__body mb-lg" style="line-height: 1.6;">Debes iniciar sesión para ver los reportes.</p>
+          <a href="login.html" class="btn btn--primary btn--lg">Iniciar Sesión</a>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+      <span>RestoApp &copy; 2026 | Taller de Refactorización y Uso de IA</span>
+    </footer>
+
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modal container -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modalContent">
+      <div class="modal__header">
+        <h3 class="modal__title" id="modalTitle"></h3>
+        <button class="modal__close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal__body" id="modalBody"></div>
+      <div class="modal__footer" id="modalFooter"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/main.js"></script>
+  <script type="module" src="../js/auth.js"></script>
+  <script type="module" src="../js/modules/reportes/reportesView.js"></script>
+
+</body>
+</html>

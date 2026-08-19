@@ -5,9 +5,11 @@
 import { AuthService } from './services/dataAdapter.js';
 import { closeModal } from './utils/helpers.js';
 import { initRippleEffects } from './utils/animations.js';
+import { initStarfield } from './utils/starfield.js';
 
 // --- Inicialización global ---
 document.addEventListener('DOMContentLoaded', () => {
+  initStarfield();
   initMobileMenu();
   initActivePage();
   initNavAuth();
@@ -68,6 +70,7 @@ function initActivePage() {
     const isActive =
       (page === 'home' && (path.endsWith('/') || path.endsWith('index.html'))) ||
       (page === 'pedidos' && path.includes('pedidos.html')) ||
+      (page === 'reportes' && path.includes('reportes.html')) ||
       (page === 'admin' && path.includes('admin.html')) ||
       (page === 'login' && path.includes('login.html'));
 
@@ -85,6 +88,7 @@ function initActivePage() {
 
 function initNavAuth() {
   const adminLink = document.getElementById('navAdminLink');
+  const facturasLink = document.getElementById('navFacturasLink');
   const authBtn = document.getElementById('navAuthBtn');
   const isLoggedIn = AuthService.isAuthenticated();
 
@@ -93,6 +97,14 @@ function initNavAuth() {
       adminLink.classList.add('visible');
     } else {
       adminLink.classList.remove('visible');
+    }
+  }
+
+  if (facturasLink) {
+    if (isLoggedIn) {
+      facturasLink.classList.add('visible');
+    } else {
+      facturasLink.classList.remove('visible');
     }
   }
 

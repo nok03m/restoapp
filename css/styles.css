@@ -18,7 +18,12 @@ html {
 
 body {
   font-family: 'Orbitron', sans-serif;
-  background-color: var(--bg-primary);
+  background-color: #020208;
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(10, 0, 40, 0.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 5, 30, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(20, 0, 50, 0.2) 0%, transparent 60%);
+  background-attachment: fixed;
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.6;
@@ -63,41 +68,41 @@ table {
 
 /* --- Variables CSS: Paleta Cyberpunk --- */
 :root {
-  /* Fondos */
-  --bg-primary: #0a0a1a;
-  --bg-secondary: #111128;
-  --bg-tertiary: #1a1a3e;
-  --bg-card: #141432;
-  --bg-card-hover: #1c1c45;
-  --bg-overlay: rgba(10, 10, 26, 0.85);
+  /* Fondos - oscuros para legibilidad sobre estrellas */
+  --bg-primary: transparent;
+  --bg-secondary: rgba(2, 2, 10, 0.6);
+  --bg-tertiary: rgba(2, 2, 10, 0.7);
+  --bg-card: rgba(2, 2, 14, 0.75);
+  --bg-card-hover: rgba(2, 2, 14, 0.85);
+  --bg-overlay: rgba(0, 0, 0, 0.85);
 
   /* Neón principales */
-  --neon-cyan: #00f0ff;
-  --neon-magenta: #ff00de;
-  --neon-yellow: #f5ff00;
-  --neon-green: #39ff14;
-  --neon-orange: #ff6e27;
-  --neon-red: #ff1744;
+  --neon-cyan: #00FFFF;
+  --neon-magenta: #6600CC;
+  --neon-yellow: #00FF00;
+  --neon-green: #00FF00;
+  --neon-orange: #00FFFF;
+  --neon-red: #6600CC;
 
   /* Neón con opacidad (para glows) */
-  --neon-cyan-30: rgba(0, 240, 255, 0.3);
-  --neon-magenta-30: rgba(255, 0, 222, 0.3);
-  --neon-yellow-30: rgba(245, 255, 0, 0.3);
+  --neon-cyan-30: rgba(0, 255, 255, 0.3);
+  --neon-magenta-30: rgba(102, 0, 204, 0.3);
+  --neon-yellow-30: rgba(0, 255, 0, 0.3);
 
   /* Bordes */
-  --border-dim: rgba(0, 240, 255, 0.15);
-  --border-neon: rgba(0, 240, 255, 0.5);
+  --border-dim: rgba(0, 255, 255, 0.15);
+  --border-neon: rgba(0, 255, 255, 0.5);
 
   /* Texto */
-  --text-primary: #e0e0ff;
-  --text-secondary: #8888aa;
-  --text-muted: #555577;
+  --text-primary: #d0d0d0;
+  --text-secondary: #777777;
+  --text-muted: #444444;
   --text-heading: #ffffff;
 
   /* Sombras */
-  --shadow-neon-cyan: 0 0 10px rgba(0, 240, 255, 0.3), 0 0 30px rgba(0, 240, 255, 0.1);
-  --shadow-neon-magenta: 0 0 10px rgba(255, 0, 222, 0.3), 0 0 30px rgba(255, 0, 222, 0.1);
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-neon-cyan: 0 0 10px rgba(0, 255, 255, 0.3), 0 0 30px rgba(0, 255, 255, 0.1);
+  --shadow-neon-magenta: 0 0 10px rgba(102, 0, 204, 0.3), 0 0 30px rgba(102, 0, 204, 0.1);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.8);
 
   /* Espaciado */
   --space-xs: 0.25rem;

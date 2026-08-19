@@ -63,7 +63,7 @@
 .btn--danger:hover {
   background-color: var(--neon-red);
   color: var(--bg-primary);
-  box-shadow: 0 0 10px rgba(255, 23, 68, 0.4);
+  box-shadow: 0 0 10px rgba(102, 0, 204, 0.4);
 }
 
 /* Btn éxito (Green neon) */
@@ -76,7 +76,7 @@
 .btn--success:hover {
   background-color: var(--neon-green);
   color: var(--bg-primary);
-  box-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
 }
 
 /* Btn fantasma (solo texto) */
@@ -137,15 +137,15 @@
 .form-textarea {
   width: 100%;
   padding: 0.7rem 1rem;
-  background-color: rgba(26, 26, 62, 0.7);
-  border: 1px solid var(--border-dim);
+  background-color: rgba(2, 2, 14, 0.65);
+  border: 1px solid rgba(0, 255, 255, 0.12);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: var(--fs-md);
   transition: all var(--transition-normal);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .form-input:focus,
@@ -162,7 +162,7 @@
 
 .form-select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300f0ff' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300FFFF' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding-right: 2.5rem;
@@ -183,15 +183,15 @@
    CARDS
    ===================== */
 .card {
-  background-color: rgba(20, 20, 50, 0.7);
-  border: 1px solid var(--border-dim);
+  background-color: rgba(2, 2, 14, 0.75);
+  border: 1px solid rgba(0, 255, 255, 0.1);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
 }
 
 .card:hover {
@@ -274,9 +274,9 @@
   overflow-x: auto;
   border: 1px solid var(--border-dim);
   border-radius: var(--radius-lg);
-  background-color: rgba(20, 20, 50, 0.65);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(2, 2, 14, 0.7);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
 }
 
 .table {
@@ -292,11 +292,11 @@
   color: var(--neon-cyan);
   text-align: left;
   padding: var(--space-md) var(--space-lg);
-  background-color: rgba(17, 17, 40, 0.8);
-  border-bottom: 1px solid var(--border-neon);
+  background-color: rgba(2, 2, 14, 0.65);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.15);
   white-space: nowrap;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .table td {
@@ -311,7 +311,7 @@
 }
 
 .table tbody tr:hover {
-  background-color: rgba(0, 240, 255, 0.03);
+  background-color: rgba(0, 255, 255, 0.03);
 }
 
 .table tbody tr:last-child td {
@@ -324,7 +324,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(10, 10, 26, 0.6);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -332,8 +332,8 @@
   opacity: 0;
   visibility: hidden;
   transition: all var(--transition-normal);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .modal-overlay--active {
@@ -342,17 +342,17 @@
 }
 
 .modal {
-  background-color: rgba(17, 17, 40, 0.85);
-  border: 1px solid var(--border-neon);
+  background-color: rgba(2, 2, 14, 0.85);
+  border: 1px solid rgba(0, 255, 255, 0.2);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
   width: 90%;
   max-width: 500px;
-  box-shadow: var(--shadow-neon-cyan), 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-neon-cyan), 0 20px 60px rgba(0, 0, 0, 0.6);
   transform: scale(0.9);
   transition: transform var(--transition-normal);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(28px) saturate(1.2);
+  -webkit-backdrop-filter: blur(28px) saturate(1.2);
 }
 
 .modal-overlay--active .modal {
@@ -460,33 +460,33 @@
 }
 
 .badge--cyan {
-  background-color: rgba(0, 240, 255, 0.1);
+  background-color: rgba(0, 255, 255, 0.1);
   color: var(--neon-cyan);
   border: 1px solid var(--neon-cyan-30);
 }
 
 .badge--magenta {
-  background-color: rgba(255, 0, 222, 0.1);
+  background-color: rgba(102, 0, 204, 0.1);
   color: var(--neon-magenta);
   border: 1px solid var(--neon-magenta-30);
 }
 
 .badge--green {
-  background-color: rgba(57, 255, 20, 0.1);
+  background-color: rgba(0, 255, 0, 0.1);
   color: var(--neon-green);
-  border: 1px solid rgba(57, 255, 20, 0.3);
+  border: 1px solid rgba(0, 255, 0, 0.3);
 }
 
 .badge--yellow {
-  background-color: rgba(245, 255, 0, 0.1);
+  background-color: rgba(0, 255, 0, 0.1);
   color: var(--neon-yellow);
   border: 1px solid var(--neon-yellow-30);
 }
 
 .badge--red {
-  background-color: rgba(255, 23, 68, 0.1);
+  background-color: rgba(102, 0, 204, 0.1);
   color: var(--neon-red);
-  border: 1px solid rgba(255, 23, 68, 0.3);
+  border: 1px solid rgba(102, 0, 204, 0.3);
 }
 
 /* =====================

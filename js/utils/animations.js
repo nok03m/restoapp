@@ -40,7 +40,7 @@ export function glitchEffect(el, duration = 300) {
  * @param {Event} event - Evento de clic.
  * @param {string} color - Color del ripple en CSS.
  */
-export function createRipple(event, color = 'rgba(0, 240, 255, 0.4)') {
+export function createRipple(event, color = 'rgba(0, 255, 255, 0.4)') {
   const el = event.currentTarget;
   if (!el) return;
 

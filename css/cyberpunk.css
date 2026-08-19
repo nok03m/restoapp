@@ -5,7 +5,7 @@
 /* --- Google Fonts import --- */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap');
 
-/* --- Background animado tipo grid --- */
+/* --- Background animado tipo grid (sutil sobre nebulosa) --- */
 body::before {
   content: '';
   position: fixed;
@@ -14,10 +14,10 @@ body::before {
   width: 100%;
   height: 100%;
   background-image:
-    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.015) 1px, transparent 1px);
   background-size: 50px 50px;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
   animation: gridScroll 20s linear infinite;
 }
@@ -34,7 +34,7 @@ body::before {
     0 0 7px var(--neon-cyan),
     0 0 10px var(--neon-cyan),
     0 0 21px var(--neon-cyan),
-    0 0 42px rgba(0, 240, 255, 0.4);
+    0 0 42px rgba(0, 255, 255, 0.4);
 }
 
 .neon-text-magenta {
@@ -43,7 +43,7 @@ body::before {
     0 0 7px var(--neon-magenta),
     0 0 10px var(--neon-magenta),
     0 0 21px var(--neon-magenta),
-    0 0 42px rgba(255, 0, 222, 0.4);
+    0 0 42px rgba(102, 0, 204, 0.4);
 }
 
 .neon-text-yellow {
@@ -86,19 +86,117 @@ body::before {
 }
 
 @keyframes glitchColor {
-  0% { text-shadow: 2px 0 #ff00de, -2px 0 #00f0ff; }
-  25% { text-shadow: -2px 0 #ff00de, 2px 0 #00f0ff; }
-  50% { text-shadow: 2px -1px #ff00de, -2px 1px #00f0ff; }
-  75% { text-shadow: -1px 2px #ff00de, 1px -2px #00f0ff; }
-  100% { text-shadow: 2px 0 #ff00de, -2px 0 #00f0ff; }
+  0% { text-shadow: 2px 0 #6600CC, -2px 0 #00FFFF; }
+  25% { text-shadow: -2px 0 #6600CC, 2px 0 #00FFFF; }
+  50% { text-shadow: 2px -1px #6600CC, -2px 1px #00FFFF; }
+  75% { text-shadow: -1px 2px #6600CC, 1px -2px #00FFFF; }
+  100% { text-shadow: 2px 0 #6600CC, -2px 0 #00FFFF; }
 }
 
 .glitch {
   animation: glitch 0.3s ease-in-out infinite alternate;
 }
 
-.glitch-text:hover {
-  animation: glitchColor 0.3s ease-in-out infinite alternate;
+/* --- Glitch Intense: pseudo-elements para aberración cromática --- */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+  animation: glitchFlicker 5s infinite;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Capa cyan - desplazamiento izquierda */
+.glitch-text::before {
+  color: #00FFFF;
+  z-index: -1;
+  animation: glitchCyan 3s infinite linear alternate-reverse;
+  clip-path: inset(0 0 65% 0);
+  mix-blend-mode: screen;
+}
+
+/* Capa magenta - desplazamiento derecha */
+.glitch-text::after {
+  color: #6600CC;
+  z-index: -1;
+  animation: glitchMagenta 2.5s infinite linear alternate-reverse;
+  clip-path: inset(60% 0 0 0);
+  mix-blend-mode: screen;
+}
+
+/* --- Animación de la capa cyan --- */
+@keyframes glitchCyan {
+  0%   { clip-path: inset(40% 0 20% 0); transform: translate(-3px, 0); }
+  5%   { clip-path: inset(10% 0 65% 0); transform: translate(3px, 0); }
+  10%  { clip-path: inset(80% 0 5% 0);  transform: translate(-2px, 0); }
+  15%  { clip-path: inset(20% 0 50% 0); transform: translate(4px, 0); }
+  20%  { clip-path: inset(55% 0 15% 0); transform: translate(-1px, 0); }
+  25%  { clip-path: inset(5% 0 80% 0);  transform: translate(2px, 0); }
+  30%  { clip-path: inset(70% 0 10% 0); transform: translate(-4px, 0); }
+  35%  { clip-path: inset(30% 0 40% 0); transform: translate(1px, 0); }
+  40%  { clip-path: inset(0); transform: translate(0); opacity: 0; }
+  55%  { clip-path: inset(0); transform: translate(0); opacity: 0; }
+  56%  { clip-path: inset(15% 0 60% 0); transform: translate(-5px, 0); opacity: 1; }
+  60%  { clip-path: inset(50% 0 25% 0); transform: translate(3px, 0); }
+  65%  { clip-path: inset(5% 0 75% 0);  transform: translate(-2px, 0); }
+  70%  { clip-path: inset(65% 0 15% 0); transform: translate(4px, 0); }
+  75%  { clip-path: inset(0); transform: translate(0); opacity: 0; }
+  85%  { clip-path: inset(0); transform: translate(0); opacity: 0; }
+  86%  { clip-path: inset(25% 0 45% 0); transform: translate(3px, 0); opacity: 1; }
+  90%  { clip-path: inset(75% 0 5% 0);  transform: translate(-3px, 0); }
+  95%  { clip-path: inset(10% 0 70% 0); transform: translate(2px, 0); }
+  100% { clip-path: inset(45% 0 30% 0); transform: translate(-1px, 0); }
+}
+
+/* --- Animación de la capa magenta --- */
+@keyframes glitchMagenta {
+  0%   { clip-path: inset(60% 0 10% 0); transform: translate(3px, 0); }
+  4%   { clip-path: inset(15% 0 55% 0); transform: translate(-4px, 0); }
+  8%   { clip-path: inset(70% 0 15% 0); transform: translate(2px, 0); }
+  12%  { clip-path: inset(5% 0 80% 0);  transform: translate(-3px, 0); }
+  16%  { clip-path: inset(45% 0 30% 0); transform: translate(5px, 0); }
+  20%  { clip-path: inset(0); transform: translate(0); opacity: 0; }
+  35%  { clip-path: inset(0); transform: translate(0); opacity: 0; }
+  36%  { clip-path: inset(35% 0 40% 0); transform: translate(4px, 0); opacity: 1; }
+  40%  { clip-path: inset(80% 0 5% 0);  transform: translate(-2px, 0); }
+  44%  { clip-path: inset(20% 0 60% 0); transform: translate(3px, 0); }
+  48%  { clip-path: inset(55% 0 20% 0); transform: translate(-5px, 0); }
+  52%  { clip-path: inset(10% 0 75% 0); transform: translate(2px, 0); }
+  56%  { clip-path: inset(0); transform: translate(0); opacity: 0; }
+  70%  { clip-path: inset(0); transform: translate(0); opacity: 0; }
+  71%  { clip-path: inset(40% 0 35% 0); transform: translate(-3px, 0); opacity: 1; }
+  75%  { clip-path: inset(75% 0 10% 0); transform: translate(4px, 0); }
+  80%  { clip-path: inset(25% 0 50% 0); transform: translate(-2px, 0); }
+  85%  { clip-path: inset(0); transform: translate(0); opacity: 0; }
+  100% { clip-path: inset(0); transform: translate(0); opacity: 0; }
+}
+
+/* --- Parpadeo irregular del texto base --- */
+@keyframes glitchFlicker {
+  0%   { opacity: 1; }
+  3%   { opacity: 0.85; }
+  6%   { opacity: 1; }
+  7%   { opacity: 0.4; text-shadow: 0 0 30px rgba(0,255,255,0.8), 0 0 60px rgba(102,0,204,0.4); }
+  8%   { opacity: 1; text-shadow: none; }
+  40%  { opacity: 1; }
+  41%  { opacity: 0.6; }
+  42%  { opacity: 1; }
+  70%  { opacity: 1; }
+  71%  { opacity: 0.3; text-shadow: 0 0 40px rgba(102,0,204,0.6), 0 0 80px rgba(0,255,255,0.3); }
+  72%  { opacity: 0.9; }
+  73%  { opacity: 0.5; }
+  74%  { opacity: 1; text-shadow: none; }
+  100% { opacity: 1; }
 }
 
 /* --- Scan line overlay --- */
@@ -293,6 +391,79 @@ body::before {
 
 body {
   animation: pageReveal 0.4s ease-out;
+  position: relative;
+}
+
+/* --- Ambient nebula glows (fijos, sutiles) --- */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse 600px 400px at 15% 25%, rgba(102, 0, 204, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 350px at 80% 60%, rgba(0, 255, 255, 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 50% 85%, rgba(0, 255, 0, 0.03) 0%, transparent 70%);
+  z-index: -1;
+  pointer-events: none;
+  animation: ambientDrift 25s ease-in-out infinite alternate;
+}
+
+@keyframes ambientDrift {
+  0%   { opacity: 0.6; transform: translate(0, 0) scale(1); }
+  50%  { opacity: 1; transform: translate(15px, -10px) scale(1.05); }
+  100% { opacity: 0.7; transform: translate(-10px, 8px) scale(0.98); }
+}
+
+/* --- CSS Shooting Stars (decorativas) --- */
+.css-shooting-star {
+  position: fixed;
+  width: 2px;
+  height: 2px;
+  background: #00FFFF;
+  border-radius: 50%;
+  box-shadow: 0 0 6px 2px rgba(0, 255, 255, 0.6), 0 0 12px 4px rgba(0, 255, 255, 0.2);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  animation: cssShootingStar 4s linear infinite;
+}
+
+.css-shooting-star::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.5), #00FFFF);
+  transform: translateY(-50%);
+}
+
+.css-shooting-star:nth-child(1) {
+  top: 8%; left: -5%;
+  animation-delay: 0s;
+  animation-duration: 3.5s;
+}
+.css-shooting-star:nth-child(2) {
+  top: 22%; left: 15%;
+  animation-delay: 4.5s;
+  animation-duration: 4s;
+}
+.css-shooting-star:nth-child(3) {
+  top: 5%; left: 45%;
+  animation-delay: 9s;
+  animation-duration: 3s;
+}
+
+@keyframes cssShootingStar {
+  0%   { opacity: 0; transform: translate(0, 0) rotate(-35deg); }
+  5%   { opacity: 1; }
+  15%  { opacity: 1; transform: translate(350px, 200px) rotate(-35deg); }
+  16%  { opacity: 0; }
+  100% { opacity: 0; transform: translate(350px, 200px) rotate(-35deg); }
 }
 
 /* --- Mobile menu overlay --- */
@@ -314,6 +485,6 @@ body {
 
 /* --- Selection color --- */
 ::selection {
-  background-color: rgba(0, 240, 255, 0.25);
+  background-color: rgba(0, 255, 255, 0.25);
   color: var(--neon-cyan);
 }

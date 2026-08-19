@@ -13,9 +13,6 @@ import {
   push,
   update,
   remove,
-  query,
-  orderByChild,
-  equalTo,
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 import { generateId } from '../utils/helpers.js';
 
@@ -44,18 +41,16 @@ async function getAllFromNode(nodo) {
 }
 
 /**
- * Lee registros de un nodo filtrados por un campo.
+ * Lee todos los registros de un nodo y los filtra por un campo client-side.
+ * Evita requerir índices ".indexOn" en las reglas de RTDB.
  * @param {string} nodo
  * @param {string} campo
  * @param {*} valor
  * @returns {Promise<Array>}
  */
 async function getByField(nodo, campo, valor) {
-  const q = query(ref(db, nodo), orderByChild(campo), equalTo(valor));
-  const snapshot = await get(q);
-  if (!snapshot.exists()) return [];
-  const data = snapshot.val();
-  return Object.keys(data).map((key) => ({ id: key, ...data[key] }));
+  const all = await getAllFromNode(nodo);
+  return all.filter((item) => item[campo] === valor);
 }
 
 // ============================================
@@ -203,6 +198,7 @@ export async function createPedido(data) {
       const detalle = {
         pedido_id: pedidoId,
         producto_id: item.producto_id,
+        nombre: item.nombre || item.producto_id,
         cantidad: item.cantidad,
         precio_unitario: item.precio_unitario,
       };

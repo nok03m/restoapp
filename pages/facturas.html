@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RestoApp - Pedidos</title>
+  <title>RestoApp - Mis Facturas</title>
   <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
 
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="../css/cyberpunk.css">
   <link rel="stylesheet" href="../css/layout.css">
   <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin.css">
 </head>
 <body>
 
@@ -40,20 +41,45 @@
     <!-- ========== CONTENIDO PRINCIPAL ========== -->
     <main class="main-content">
 
-      <!-- Page header -->
-      <div class="page-header fade-in-up">
-        <h1 class="page-header__title neon-text-cyan glitch-text" data-text="Crear Pedido">Crear Pedido</h1>
-        <p class="page-header__subtitle">Selecciona productos del menú y arma el pedido del cliente.</p>
+      <!-- Gate de autenticación -->
+      <div id="facturasGate" style="display: none;">
+
+        <!-- Page header -->
+        <div class="page-header fade-in-up">
+          <h1 class="page-header__title neon-text-cyan glitch-text" data-text="Mis Facturas">Mis Facturas</h1>
+          <p class="page-header__subtitle">Consulta el historial de facturas generadas por tus pedidos.</p>
+        </div>
+
+        <div class="cyber-divider"></div>
+
+        <!-- Stats -->
+        <div id="facturasStats"></div>
+
+        <!-- Toolbar -->
+        <div class="admin-toolbar fade-in-up stagger-2">
+          <div class="admin-toolbar__search">
+            <input type="text" class="form-input" id="facturasSearch" placeholder="Buscar por cliente o mesa...">
+          </div>
+          <button class="btn btn--ghost btn--sm" id="refreshFacturasBtn">&#8635; Actualizar</button>
+        </div>
+
+        <!-- Tabla de facturas -->
+        <div id="facturasContainer" class="fade-in-up stagger-3">
+          <div class="flex-center" style="padding: 3rem;">
+            <div class="loading-spinner"></div>
+            <span class="text-muted text-sm" style="margin-left: 1rem;">Cargando facturas...</span>
+          </div>
+        </div>
+
       </div>
 
-      <div class="cyber-divider"></div>
-
-      <!-- Contenido del módulo pedidos (renderizado por JS) -->
-      <div id="pedidoContainer" class="fade-in-up stagger-2">
-        <!-- pedidoView.js inyectará aquí el contenido dinámico -->
-        <div class="flex-center" style="padding: 3rem;">
-          <div class="loading-spinner"></div>
-          <span class="text-muted text-sm" style="margin-left: 1rem;">Cargando menú...</span>
+      <!-- Contenido cuando NO está autenticado -->
+      <div id="facturasUnauthorized" class="flex-center" style="min-height: 50vh;">
+        <div class="card scale-in" style="text-align: center; max-width: 400px; padding: 2.5rem;">
+          <div class="empty-state__icon text-red" style="font-size: 3rem;">&#128274;</div>
+          <h3 class="card__title text-red mb-md" style="margin-top: 1rem;">Acceso No Autorizado</h3>
+          <p class="card__body mb-lg" style="line-height: 1.6;">Debes iniciar sesión para ver las facturas.</p>
+          <a href="login.html" class="btn btn--primary btn--lg">Iniciar Sesión</a>
         </div>
       </div>
 
@@ -69,7 +95,7 @@
   <!-- Toast container -->
   <div class="toast-container" id="toastContainer"></div>
 
-  <!-- Modal container (compartido) -->
+  <!-- Modal container -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal" id="modalContent">
       <div class="modal__header">
@@ -84,7 +110,7 @@
   <!-- Scripts -->
   <script type="module" src="../js/main.js"></script>
   <script type="module" src="../js/auth.js"></script>
-  <script type="module" src="../js/modules/pedidos/pedidoView.js"></script>
+  <script type="module" src="../js/modules/facturas/facturasListView.js"></script>
 
 </body>
 </html>

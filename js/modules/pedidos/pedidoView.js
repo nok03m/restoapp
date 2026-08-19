@@ -443,23 +443,45 @@ async function procesarFactura() {
   generarBtn.textContent = 'Procesando...';
 
   try {
-    const pedido = await PedidosService.create(currentPedido);
-
-    const factura = await FacturasService.create(pedido.id, {
-      metodo_pago: 'efectivo',
-    });
-
-    if (factura) {
-      showFacturaModal(pedido, factura);
-      resetPedido();
-      showToast('Factura generada exitosamente', 'success');
-    } else {
-      showToast('Error al crear la factura', 'error');
-      generarBtn.disabled = false;
-      generarBtn.textContent = 'Generar Factura';
+    let pedido;
+    try {
+      pedido = await PedidosService.create(currentPedido);
+    } catch (pedidoErr) {
+      console.error('[PedidoView] Error creando pedido:', pedidoErr);
+      showToast('Error al crear el pedido: ' + (pedidoErr.message || 'Error desconocido'), 'error');
+      return;
     }
+
+    if (!pedido || !pedido.id) {
+      console.error('[PedidoView] Pedido creado sin ID válido:', pedido);
+      showToast('Error: el pedido no se guardó correctamente', 'error');
+      return;
+    }
+
+    let factura;
+    try {
+      factura = await FacturasService.create(pedido.id, {
+        metodo_pago: 'efectivo',
+      });
+    } catch (facturaErr) {
+      console.error('[PedidoView] Error creando factura:', facturaErr);
+      showToast('Pedido guardado, pero error al crear la factura: ' + (facturaErr.message || 'Error desconocido'), 'error');
+      return;
+    }
+
+    if (!factura) {
+      console.error('[PedidoView] Factura retornó null para pedido:', pedido.id);
+      showToast('Error: la factura no se pudo generar', 'error');
+      return;
+    }
+
+    showFacturaModal(pedido, factura);
+    resetPedido();
+    showToast('Factura generada exitosamente', 'success');
   } catch (err) {
-    showToast('Error al procesar el pedido', 'error');
+    console.error('[PedidoView] Error inesperado en procesarFactura:', err);
+    showToast('Error inesperado al procesar el pedido', 'error');
+  } finally {
     generarBtn.disabled = false;
     generarBtn.textContent = 'Generar Factura';
   }
@@ -474,7 +496,7 @@ function showFacturaModal(pedido, factura) {
     .map(
       (item) => `
       <div class="factura-preview__line">
-        <span>${item.nombre} x${item.cantidad}</span>
+        <span>${item.nombre || 'Producto'} x${item.cantidad}</span>
         <span>${formatCurrency(item.cantidad * item.precio_unitario)}</span>
       </div>
     `
