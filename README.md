@@ -71,8 +71,7 @@ Credenciales de prueba (configuradas en Firebase):
 
 | Email | Contraseña | Rol |
 |-------|-----------|-----|
-| `admin@restoapp.com` | `admin123` | admin |
-| `mesero@restoapp.com` | `mesero123` | usuario |
+| `atropos@mail.com` | `Acdc.x27` | admin |
 
 Las páginas `admin.html`, `facturas.html` y `reportes.html` requieren autenticación.
 
